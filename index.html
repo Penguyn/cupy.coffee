@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="en" id="htmlRoot">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>cupy • ქაფი — coffee bar</title>
+
+<!--
+  PLACEHOLDER CONTENT NOTICE
+  - All photos are placeholder images (picsum.photos), swap with real photography.
+  - Menu items, team bios, hours, address, phone, email, map are placeholder text — replace before launch.
+  - Fonts: drop the NewHero font files into /Font_New_Hero/ next to this file (same as your QR-code page)
+    and they'll apply automatically. Font family names live in the CSS variables at the top of <style>,
+    so swapping typefaces later is a one-line change (--font-display / --font-body).
+-->
+
+<style>
+  @font-face {
+    font-family: 'NewHero';
+    src: url('Font_New_Hero/fonnts.com-New_Hero_Super.otf') format('opentype');
+    font-weight: 400;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: 'NewHero';
+    src: url('Font_New_Hero/fonnts.com-New_Hero_Super_Italic.otf') format('opentype');
+    font-weight: 400;
+    font-style: italic;
+  }
+
+  :root {
+    /* ---- Typography (swap these two lines when real fonts arrive) ---- */
+    --font-display: 'NewHero', sans-serif;
+    --font-body: 'NewHero', sans-serif;
+
+    /* ---- Palette (from cupy brand: orange on near-black) ---- */
+    --clr-bg: #0b0b0c;
+    --clr-bg-alt: #141311;
+    --clr-card: rgba(0,0,0,0.36);
+    --clr-card-soft: rgba(255,255,255,0.045);
+    --clr-border: rgba(255,255,255,0.12);
+    --clr-accent: #ff7900;
+    --clr-accent-soft: rgba(255,121,0,0.16);
+    --clr-text: #ffffff;
+    --clr-muted: rgba(255,255,255,0.64);
+    --clr-faint: rgba(255,255,255,0.4);
+
+    /* ---- Shape ---- */
+    --radius-btn: 12px;
+    --radius-card: 20px;
+    --radius-img: 16px;
+  }
+
+  * , *::before, *::after { box-sizing: border-box; margin:0; padding:0; }
+  html { scroll-behavior: smooth; }
+  html, body { background: var(--clr-bg); }
+  body {
+    font-family: var(--font-body);
+    color: var(--clr-text);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+  img { display:block; max-width:100%; }
+  button { font-family: inherit; cursor:pointer; }
+  a { color: inherit; }
+
+  /* ambient texture across the whole page — uses your cupywall.svg once it's uploaded
+     alongside this file; the dark gradient keeps text legible over it. Tweak the two
+     rgba alpha values below (currently 0.86) to let more/less of the wall show through. */
+  body::before {
+    content:'';
+    position: fixed; inset:0; z-index:-2;
+    background-color: var(--clr-bg);
+    background-image:
+      linear-gradient(180deg, rgba(11,11,12,0.86), rgba(11,11,12,0.86)),
+      radial-gradient(circle at 12% 8%, rgba(255,121,0,0.10), transparent 45%),
+      radial-gradient(circle at 88% 92%, rgba(255,121,0,0.08), transparent 40%),
+      url('cupywall.svg');
+    background-size: cover, cover, cover, cover;
+    background-position: center, center, center, center;
+    background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
+    background-attachment: fixed, fixed, fixed, fixed;
+  }
+
+  .eyebrow {
+    font-family: var(--font-display);
+    font-style: normal;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--clr-accent);
+    margin-bottom: 10px;
+  }
+  .section-heading {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(28px, 5vw, 44px);
+    letter-spacing: 0.01em;
+    margin-bottom: 14px;
+  }
+  .section-sub {
+    color: var(--clr-muted);
+    font-size: 15px;
+    max-width: 46ch;
+    line-height: 1.6;
+  }
+  section { padding: clamp(64px, 10vw, 110px) clamp(20px, 6vw, 64px); position: relative; }
+  .wrap { max-width: 1180px; margin: 0 auto; }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 22px;
+    background: var(--clr-accent);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-btn);
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 13px;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+    transition: opacity .2s, transform .2s;
+  }
+  .btn:hover { opacity: .88; transform: translateY(-1px); }
+  .btn-ghost {
+    background: transparent;
+    border: 1px solid var(--clr-border);
+    color: var(--clr-text);
+  }
+  .btn-ghost:hover { border-color: var(--clr-accent); }
+
+  /* ===================== HEADER ===================== */
+  header {
+    position: fixed; top:0; left:0; right:0; z-index: 200;
+    display:flex; align-items:center; justify-content:space-between;
+    padding: 16px clamp(20px, 6vw, 48px);
+    background: rgba(11,11,12,0.0);
+    backdrop-filter: blur(0px);
+    transition: background .3s, backdrop-filter .3s, border-color .3s;
+    border-bottom: 1px solid transparent;
+  }
+  header.scrolled {
+    background: rgba(11,11,12,0.72);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--clr-border);
+  }
+  .brand { display:flex; align-items:center; gap:10px; }
+  .brand svg { width: 30px; height:30px; }
+  .brand svg path { fill: var(--clr-accent); }
+  .brand span {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 18px;
+    letter-spacing: 0.06em;
+  }
+  .header-right { display:flex; align-items:center; gap:14px; }
+  nav.desktop-nav { display:flex; gap: 28px; }
+  nav.desktop-nav a {
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--clr-muted);
+    text-decoration:none;
+    transition: color .2s;
+  }
+  nav.desktop-nav a:hover { color: var(--clr-text); }
+  @media (max-width: 780px){ nav.desktop-nav { display:none; } }
+
+  .lang-toggle {
+    display:flex; align-items:center;
+    border: 1px solid var(--clr-border);
+    border-radius: var(--radius-btn);
+    overflow:hidden;
+    font-family: var(--font-display);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+  }
+  .lang-toggle button {
+    background: transparent; border:none; color: var(--clr-faint);
+    padding: 8px 14px; transition: background .2s, color .2s;
+  }
+  .lang-toggle button.active { background: var(--clr-accent); color:#fff; }
+
+  /* ===================== HERO ===================== */
+  #hero {
+    position: relative;
+    height: 100svh;
+    min-height: 560px;
+    display:flex; align-items:flex-end; justify-content:center;
+    padding: 0;
+    overflow:hidden;
+  }
+  .hero-slide {
+    position:absolute; inset:0;
+    background-size: cover; background-position:center;
+    opacity:0; transform: scale(1.04);
+    transition: opacity 1.6s ease, transform 6s ease;
+  }
+  .hero-slide.active { opacity:1; transform: scale(1); }
+  #hero::after {
+    content:'';
+    position:absolute; inset:0;
+    background: linear-gradient(180deg, rgba(11,11,12,0.15) 0%, rgba(11,11,12,0.25) 45%, rgba(11,11,12,0.92) 100%);
+    z-index:1;
+  }
+  .hero-content {
+    position:relative; z-index:2;
+    width:100%; max-width: 480px;
+    margin: 0 auto;
+    padding: 28px 26px clamp(40px, 8vw, 64px);
+    display:flex; flex-direction:column; align-items:center; text-align:center;
+    gap: 10px;
+  }
+  .hero-logo svg { width: 84px; height:84px; }
+  .hero-logo svg path { fill: var(--clr-accent); }
+  .hero-tagline {
+    font-family: var(--font-display);
+    font-size: 14px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--clr-text);
+  }
+  .hero-about {
+    color: var(--clr-muted);
+    font-size: 14px;
+    line-height: 1.6;
+    max-width: 34ch;
+    margin-top: 4px;
+  }
+  .hero-dots { display:flex; gap:6px; margin-top: 16px; }
+  .hero-dots span { width:5px; height:5px; border-radius:50%; background: rgba(255,255,255,0.3); transition: background .3s, width .3s; }
+  .hero-dots span.active { background: var(--clr-accent); width: 16px; border-radius: 3px; }
+
+  .scroll-cue {
+    position:absolute; bottom: 14px; left:50%; transform: translateX(-50%);
+    z-index:2; display:flex; flex-direction:column; align-items:center; gap:6px;
+    color: var(--clr-faint); font-size: 10px; letter-spacing: 0.2em; text-transform:uppercase;
+    animation: bob 2.2s ease-in-out infinite;
+  }
+  @keyframes bob { 0%,100%{ transform: translate(-50%,0);} 50%{ transform: translate(-50%,6px);} }
+
+  /* ===================== MENU ===================== */
+  #menu { background: var(--clr-bg-alt); }
+  .cat-row {
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 16px; margin-top: 36px;
+  }
+  .cat-btn {
+    display:flex; flex-direction:column; align-items:center;
+    background: var(--clr-card-soft);
+    border: 1px solid var(--clr-border);
+    border-radius: var(--radius-card);
+    padding: 12px 12px 16px;
+    color: var(--clr-text);
+    text-align:center;
+    transition: border-color .2s, background .2s, transform .2s;
+  }
+  .cat-btn:hover { border-color: var(--clr-accent); transform: translateY(-3px); }
+  .cat-btn .cat-thumb {
+    width:100%; aspect-ratio: 1/1; border-radius: var(--radius-img);
+    overflow:hidden; margin-bottom: 12px; background: rgba(255,255,255,0.05);
+    border: 1px solid var(--clr-border);
+  }
+  .cat-btn .cat-thumb img { width:100%; height:100%; object-fit:cover; }
+  .cat-btn .cat-label {
+    font-family: var(--font-display); font-size: 14px; letter-spacing: 0.03em;
+  }
+
+  .modal-overlay {
+    position: fixed; inset:0; z-index: 500;
+    background: rgba(6,6,7,0.86);
+    backdrop-filter: blur(6px);
+    display:flex; align-items:center; justify-content:center;
+    opacity:0; pointer-events:none;
+    transition: opacity .25s ease;
+    padding: 24px;
+  }
+  .modal-overlay.open { opacity:1; pointer-events:auto; }
+  .modal-panel {
+    width:100%; max-width: 820px; max-height: 84vh;
+    background: rgba(20,19,17,0.92);
+    border: 1px solid var(--clr-border);
+    border-radius: var(--radius-card);
+    padding: clamp(20px, 4vw, 34px);
+    overflow-y:auto;
+    transform: translateY(14px); opacity:0;
+    transition: transform .3s ease, opacity .3s ease;
+  }
+  .modal-overlay.open .modal-panel { transform: translateY(0); opacity:1; }
+  .modal-head { display:flex; align-items:center; justify-content:space-between; margin-bottom: 22px; }
+  .modal-head h3 { font-family: var(--font-display); font-size: 24px; font-weight:400; }
+  .modal-close {
+    background: transparent; border: 1px solid var(--clr-border);
+    border-radius: var(--radius-btn); color: var(--clr-text);
+    padding: 9px 16px; font-size: 13px; letter-spacing:0.06em;
+    transition: border-color .2s;
+  }
+  .modal-close:hover { border-color: var(--clr-accent); }
+  .item-grid {
+    display:grid; grid-template-columns: repeat(auto-fill, minmax(150px,1fr));
+    gap: 18px;
+  }
+  .item-card { text-align:center; }
+  .item-card .thumb {
+    aspect-ratio: 1/1; border-radius: var(--radius-img); overflow:hidden;
+    background: rgba(255,255,255,0.05); margin-bottom: 10px;
+    border: 1px solid var(--clr-border);
+  }
+  .item-card .thumb img { width:100%; height:100%; object-fit:cover; }
+  .item-card .name { font-size: 13px; color: var(--clr-text); letter-spacing:0.02em; }
+  .item-card .price { font-size: 12px; color: var(--clr-accent); margin-top: 3px; font-family: var(--font-display); }
+  .group-divider {
+    grid-column: 1 / -1;
+    display:flex; align-items:center; gap:10px;
+    margin: 6px 0 2px;
+    color: var(--clr-faint); font-size: 11px; letter-spacing: 0.12em; text-transform:uppercase;
+  }
+  .group-divider::before, .group-divider::after { content:''; flex:1; height:1px; background: var(--clr-border); }
+  .empty-note { grid-column: 1/-1; text-align:center; color: var(--clr-muted); padding: 20px 0; font-size:14px; }
+
+  /* ===================== TEAM ===================== */
+  #team .wrap { position:relative; }
+  .team-track-wrap { margin-top: 40px; position:relative; }
+  .team-track {
+    display:flex; gap: clamp(16px,3vw,28px);
+    overflow-x:auto; scroll-snap-type: x mandatory;
+    padding-bottom: 8px;
+    scrollbar-width: none;
+  }
+  .team-track::-webkit-scrollbar { display:none; }
+  .team-card {
+    scroll-snap-align: start;
+    flex: 0 0 calc((100% - 2*28px)/3);
+    display:flex; flex-direction:column; align-items:center; text-align:center;
+    padding: 22px 14px;
+  }
+  @media (max-width: 900px){ .team-card{ flex: 0 0 calc((100% - 28px)/2); } }
+  @media (max-width: 600px){ .team-card{ flex: 0 0 100%; } }
+  .team-photo {
+    width: 148px; height:148px; border-radius: 50%; overflow:hidden;
+    border: 2px solid var(--clr-accent);
+    padding: 4px; margin-bottom: 16px;
+  }
+  .team-photo img { width:100%; height:100%; object-fit:cover; border-radius:50%; }
+  .team-name { font-family: var(--font-display); font-size: 17px; margin-bottom: 4px; }
+  .team-role { font-size: 12px; letter-spacing: 0.08em; text-transform:uppercase; color: var(--clr-accent); }
+
+  .team-controls { display:flex; gap: 10px; margin-top: 24px; justify-content:center; }
+  .team-controls.hidden { display:none; }
+  .arrow-btn {
+    width: 42px; height:42px; border-radius: var(--radius-btn);
+    background: var(--clr-card-soft); border: 1px solid var(--clr-border);
+    color: var(--clr-text); display:flex; align-items:center; justify-content:center;
+    transition: border-color .2s;
+  }
+  .arrow-btn:hover { border-color: var(--clr-accent); }
+
+  /* ===================== CONTACT ===================== */
+  #contact { background: var(--clr-bg-alt); }
+  .contact-grid {
+    display:grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 36px;
+  }
+  @media (max-width: 860px){ .contact-grid{ grid-template-columns: 1fr; } }
+  .glass-card {
+    background: var(--clr-card);
+    border: 1px solid var(--clr-border);
+    border-radius: var(--radius-card);
+    padding: clamp(22px, 4vw, 32px);
+  }
+  .hours-table { width:100%; border-collapse: collapse; margin-top: 6px; }
+  .hours-table td { padding: 7px 0; font-size: 14px; border-bottom: 1px solid rgba(255,255,255,0.06); }
+  .hours-table td:first-child { color: var(--clr-muted); }
+  .hours-table td:last-child { text-align:right; }
+  .hours-table tr:last-child td { border-bottom:none; }
+
+  .info-line { display:flex; gap:12px; align-items:flex-start; margin-top:14px; font-size:14px; color: var(--clr-text); }
+  .info-line svg { width:18px; height:18px; flex-shrink:0; margin-top:2px; }
+  .info-line svg path, .info-line svg circle { stroke: var(--clr-accent); }
+
+  .socials-row { display:flex; gap:16px; margin-top: 22px; }
+  .social-icon {
+    width: 42px; height:42px; border-radius: 50%;
+    background: var(--clr-card-soft); border: 1px solid var(--clr-border);
+    display:flex; align-items:center; justify-content:center;
+    transition: border-color .2s, transform .2s;
+  }
+  .social-icon:hover { border-color: var(--clr-accent); transform: translateY(-2px); }
+  .social-icon svg { width:18px; height:18px; }
+  .social-icon svg path { fill: var(--clr-text); }
+  .social-icon:hover svg path { fill: var(--clr-accent); }
+
+  .map-card { padding:0; overflow:hidden; display:flex; }
+  .map-card iframe { width:100%; height:100%; min-height: 340px; border:0; filter: grayscale(0.15) contrast(1.05); }
+
+  footer {
+    padding: 28px clamp(20px,6vw,48px);
+    text-align:center; font-size:12px; color: var(--clr-faint);
+    border-top: 1px solid var(--clr-border);
+  }
+</style>
+</head>
+<body>
+
+<!-- ===================== HEADER ===================== -->
+<header id="siteHeader">
+  <div class="brand">
+    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <g><path d="M69.8642,31.4979c6.9432,16.0445-.9626,15.6623-9.4727,22.526-9.9846,8.053,22.1024,15.8641,23.7586,6.4504l-7.6275-.9196c7.3232-.0768,19.2188-3.2681,16.2495-12.0455-2.857-8.4454-13.8535-4.5229-22.9079-16.0114Z"/><path d="M63.329,23.6869c-10.5488.8349-15.9623,10.7798-22.7621,17.6688.1102-.3833.2048-.7718.2835-1.1657,1.0187-5.2665-.4462-10.6801-3.2397-15.18-.0945-.1417-.2153-.3203-.3151-.4621-.42-.6458-.8979-1.2392-1.4124-1.822-.6248-.8034-1.3442-1.4597-2.074-2.1371-.2468-.2153-.5461-.4568-.8034-.6616-.3361-.2573-.6826-.5041-1.0291-.7403,9.2204-2.1581,25.5607-1.6225,31.3524,4.4999Z"/><path d="M53.5056,41.1158c.9801,4.1301,5.1254,6.6852,9.261,5.7037,4.1301-.9801,6.6852-5.1254,5.705-9.2555-.9801-4.1301-5.1254-6.6852-9.2555-5.705-4.1356.9815-6.6907,5.1267-5.7105,9.2568ZM59.5737,39.1594c-.335-1.4115.5363-2.8249,1.9477-3.1599,1.406-.3337,2.8194.5376,3.1544,1.949.3337,1.406-.5376,2.8195-1.9436,3.1531-1.4114.335-2.8249-.5363-3.1586-1.9423Z"/><g><path d="M22.5952,17.27c.1593.0306.3927.0789.548.1163.4727.0636.8227.187,1.2689.3482,2.1819.6341,4.1667,1.8809,5.9672,3.2406.2577.206.5559.4488.8068.6648.7293.6788,1.449,1.3332,2.074,2.1382.512.5828.9899,1.1719,1.4109,1.8198.0983.1395.2221.3196.3166.4621,2.7937,4.4992,4.2557,9.9127,3.2366,15.1807-.6325,3.1981-2.4366,6.1514-4.9751,8.186-.1297.0837-.245.1948-.26.2015-.0883.0396-.3235.1505-.3461-.0438-.0671-3.4789-.6733-6.5488-2.5241-9.5104-.1479-.256-.2753-.425-.4317-.6642-.7556-1.1548-1.7491-2.1982-2.7937-3.1203-.2106-.1711-.4026-.3735-.6339-.5492-2.9907-2.3095-6.5548-3.914-8.7597-7.111-.9021-1.4154-1.4901-2.8941-1.8597-4.4253-1.0229-4.1561,2.8371-7.8928,6.9551-6.9341Z"/><path d="M22.6854,51.6c-.1593-.0309-.3925-.0795-.5478-.117-.4726-.0642-.8225-.1882-1.2684-.35-2.181-.6373-4.1639-1.8869-5.9625-3.2492-.2574-.2064-.5552-.4496-.8058-.666-.7283-.6798-1.4471-1.3353-2.0709-2.1412-.5111-.5836-.9882-1.1733-1.4082-1.8219-.0981-.1397-.2217-.3199-.316-.4626-2.7871-4.5032-4.2413-9.9189-3.2146-15.1854.6372-3.1972,2.4455-6.1478,4.9869-8.1788.1298-.0835.2453-.1945.2603-.2012.0884-.0394.3237-.15.3461.0443.0621,3.479.6638,6.5497,2.5104,9.514.1475.2562.2746.4254.4308.6649.7539,1.1559,1.7459,2.2008,2.7892,3.1243.2104.1714.4021.374.6331.5501,2.9873,2.3138,6.5491,3.9235,8.7494,7.1237.9001,1.4167,1.4859,2.8963,1.8532,4.428,1.0168,4.1576-2.8485,7.8887-6.9651,6.924Z"/></g></g>
+    </svg>
+    <span>cupy</span>
+  </div>
+  <nav class="desktop-nav">
+    <a href="#menu" data-i18n="nav_menu">Menu</a>
+    <a href="#team" data-i18n="nav_team">Team</a>
+    <a href="#contact" data-i18n="nav_contact">Contact</a>
+  </nav>
+  <div class="header-right">
+    <div class="lang-toggle">
+      <button id="btnEn" class="active" onclick="setLang('en')">EN</button>
+      <button id="btnGe" onclick="setLang('ge')">GE</button>
+    </div>
+  </div>
+</header>
+
+<!-- ===================== HERO ===================== -->
+<section id="hero">
+  <div class="hero-slide active" style="background-image:url('https://picsum.photos/seed/cupy1/1600/1200')"></div>
+  <div class="hero-slide" style="background-image:url('https://picsum.photos/seed/cupy2/1600/1200')"></div>
+  <div class="hero-slide" style="background-image:url('https://picsum.photos/seed/cupy3/1600/1200')"></div>
+  <div class="hero-slide" style="background-image:url('https://picsum.photos/seed/cupy4/1600/1200')"></div>
+
+  <div class="hero-content">
+    <div class="hero-logo">
+      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <g><path d="M69.8642,31.4979c6.9432,16.0445-.9626,15.6623-9.4727,22.526-9.9846,8.053,22.1024,15.8641,23.7586,6.4504l-7.6275-.9196c7.3232-.0768,19.2188-3.2681,16.2495-12.0455-2.857-8.4454-13.8535-4.5229-22.9079-16.0114Z"/><path d="M63.329,23.6869c-10.5488.8349-15.9623,10.7798-22.7621,17.6688.1102-.3833.2048-.7718.2835-1.1657,1.0187-5.2665-.4462-10.6801-3.2397-15.18-.0945-.1417-.2153-.3203-.3151-.4621-.42-.6458-.8979-1.2392-1.4124-1.822-.6248-.8034-1.3442-1.4597-2.074-2.1371-.2468-.2153-.5461-.4568-.8034-.6616-.3361-.2573-.6826-.5041-1.0291-.7403,9.2204-2.1581,25.5607-1.6225,31.3524,4.4999Z"/><path d="M53.5056,41.1158c.9801,4.1301,5.1254,6.6852,9.261,5.7037,4.1301-.9801,6.6852-5.1254,5.705-9.2555-.9801-4.1301-5.1254-6.6852-9.2555-5.705-4.1356.9815-6.6907,5.1267-5.7105,9.2568ZM59.5737,39.1594c-.335-1.4115.5363-2.8249,1.9477-3.1599,1.406-.3337,2.8194.5376,3.1544,1.949.3337,1.406-.5376,2.8195-1.9436,3.1531-1.4114.335-2.8249-.5363-3.1586-1.9423Z"/><g><path d="M22.5952,17.27c.1593.0306.3927.0789.548.1163.4727.0636.8227.187,1.2689.3482,2.1819.6341,4.1667,1.8809,5.9672,3.2406.2577.206.5559.4488.8068.6648.7293.6788,1.449,1.3332,2.074,2.1382.512.5828.9899,1.1719,1.4109,1.8198.0983.1395.2221.3196.3166.4621,2.7937,4.4992,4.2557,9.9127,3.2366,15.1807-.6325,3.1981-2.4366,6.1514-4.9751,8.186-.1297.0837-.245.1948-.26.2015-.0883.0396-.3235.1505-.3461-.0438-.0671-3.4789-.6733-6.5488-2.5241-9.5104-.1479-.256-.2753-.425-.4317-.6642-.7556-1.1548-1.7491-2.1982-2.7937-3.1203-.2106-.1711-.4026-.3735-.6339-.5492-2.9907-2.3095-6.5548-3.914-8.7597-7.111-.9021-1.4154-1.4901-2.8941-1.8597-4.4253-1.0229-4.1561,2.8371-7.8928,6.9551-6.9341Z"/><path d="M22.6854,51.6c-.1593-.0309-.3925-.0795-.5478-.117-.4726-.0642-.8225-.1882-1.2684-.35-2.181-.6373-4.1639-1.8869-5.9625-3.2492-.2574-.2064-.5552-.4496-.8058-.666-.7283-.6798-1.4471-1.3353-2.0709-2.1412-.5111-.5836-.9882-1.1733-1.4082-1.8219-.0981-.1397-.2217-.3199-.316-.4626-2.7871-4.5032-4.2413-9.9189-3.2146-15.1854.6372-3.1972,2.4455-6.1478,4.9869-8.1788.1298-.0835.2453-.1945.2603-.2012.0884-.0394.3237-.15.3461.0443.0621,3.479.6638,6.5497,2.5104,9.514.1475.2562.2746.4254.4308.6649.7539,1.1559,1.7459,2.2008,2.7892,3.1243.2104.1714.4021.374.6331.5501,2.9873,2.3138,6.5491,3.9235,8.7494,7.1237.9001,1.4167,1.4859,2.8963,1.8532,4.428,1.0168,4.1576-2.8485,7.8887-6.9651,6.924Z"/></g></g>
+      </svg>
+    </div>
+    <div class="hero-tagline" data-i18n="hero_tagline">Coffee Bar</div>
+    <p class="hero-about" data-i18n="hero_about">Two friends, one shared love for coffee — cupy was born from that.</p>
+    <div class="hero-dots"><span class="active"></span><span></span><span></span><span></span></div>
+  </div>
+
+  <div class="scroll-cue" data-i18n="scroll_hint">Scroll</div>
+</section>
+
+<!-- ===================== MENU ===================== -->
+<section id="menu">
+  <div class="wrap">
+    <p class="eyebrow" data-i18n="eyebrow_menu">What we pour</p>
+    <h2 class="section-heading" data-i18n="menu_heading">Menu</h2>
+    <p class="section-sub" data-i18n="menu_sub">Tap a category to see everything we've got.</p>
+
+    <div class="cat-row" id="catRow"></div>
+  </div>
+</section>
+
+<div class="modal-overlay" id="menuModal" onclick="if(event.target===this) closeMenu()">
+  <div class="modal-panel">
+    <div class="modal-head">
+      <h3 id="modalTitle">Hot Drinks</h3>
+      <button class="modal-close" onclick="closeMenu()" data-i18n="close_btn">✕ Close</button>
+    </div>
+    <div class="item-grid" id="modalGrid"></div>
+  </div>
+</div>
+
+<!-- ===================== TEAM ===================== -->
+<section id="team">
+  <div class="wrap">
+    <p class="eyebrow" data-i18n="eyebrow_team">Behind the counter</p>
+    <h2 class="section-heading" data-i18n="team_heading">Team</h2>
+    <p class="section-sub" data-i18n="team_sub">The people who started cupy — and the ones who keep it running.</p>
+
+    <div class="team-track-wrap">
+      <div class="team-track" id="teamTrack"></div>
+      <div class="team-controls">
+        <button class="arrow-btn" onclick="scrollTeam(-1)" aria-label="Previous">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <button class="arrow-btn" onclick="scrollTeam(1)" aria-label="Next">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CONTACT ===================== -->
+<section id="contact">
+  <div class="wrap">
+    <p class="eyebrow" data-i18n="eyebrow_contact">Find us</p>
+    <h2 class="section-heading" data-i18n="contact_heading">Contact</h2>
+
+    <div class="contact-grid">
+      <div class="glass-card">
+        <p class="eyebrow" data-i18n="hours_label">Opening Hours</p>
+        <table class="hours-table">
+          <tr><td data-i18n="day_mon">Monday</td><td>08:00 – 22:00</td></tr>
+          <tr><td data-i18n="day_tue">Tuesday</td><td>08:00 – 22:00</td></tr>
+          <tr><td data-i18n="day_wed">Wednesday</td><td>08:00 – 22:00</td></tr>
+          <tr><td data-i18n="day_thu">Thursday</td><td>08:00 – 22:00</td></tr>
+          <tr><td data-i18n="day_fri">Friday</td><td>08:00 – 23:00</td></tr>
+          <tr><td data-i18n="day_sat">Saturday</td><td>09:00 – 23:00</td></tr>
+          <tr><td data-i18n="day_sun">Sunday</td><td>09:00 – 21:00</td></tr>
+        </table>
+
+        <div class="info-line">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+          <span data-i18n="address_val">1 Example Street, Tbilisi, Georgia</span>
+        </div>
+        <div class="info-line">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          <span>+995 000 000 000</span>
+        </div>
+        <div class="info-line">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="M22 6l-10 7L2 6"/></svg>
+          <span>hello@cupy.coffee</span>
+        </div>
+
+        <p class="eyebrow" style="margin-top:26px;" data-i18n="social_label">Follow us</p>
+        <div class="socials-row">
+          <a class="social-icon" href="https://www.instagram.com/cupy.coffeebar/" target="_blank" rel="noopener" aria-label="Instagram">
+            <svg viewBox="0 0 24 24"><path d="M12 2.2c3.2 0 3.6 0 4.9.07 1.2.06 2.06.25 2.5.42a5.05 5.05 0 0 1 1.8 1.18c.55.55.9 1.1 1.18 1.8.17.44.36 1.3.42 2.5.06 1.3.07 1.7.07 4.9s0 3.6-.07 4.9c-.06 1.2-.25 2.06-.42 2.5a5.05 5.05 0 0 1-1.18 1.8 5.05 5.05 0 0 1-1.8 1.18c-.44.17-1.3.36-2.5.42-1.3.06-1.7.07-4.9.07s-3.6 0-4.9-.07c-1.2-.06-2.06-.25-2.5-.42a5.05 5.05 0 0 1-1.8-1.18 5.05 5.05 0 0 1-1.18-1.8c-.17-.44-.36-1.3-.42-2.5C2.21 15.6 2.2 15.2 2.2 12s0-3.6.07-4.9c.06-1.2.25-2.06.42-2.5a5.05 5.05 0 0 1 1.18-1.8 5.05 5.05 0 0 1 1.8-1.18c.44-.17 1.3-.36 2.5-.42C8.4 2.21 8.8 2.2 12 2.2zm0 3.15A6.65 6.65 0 1 0 12 18.65 6.65 6.65 0 0 0 12 5.35zm0 10.97a4.32 4.32 0 1 1 0-8.64 4.32 4.32 0 0 1 0 8.64zm6.9-11.22a1.55 1.55 0 1 1-3.1 0 1.55 1.55 0 0 1 3.1 0z"/></svg>
+          </a>
+          <a class="social-icon" href="https://www.facebook.com/coffee.moves.friendship/" target="_blank" rel="noopener" aria-label="Facebook">
+            <svg viewBox="0 0 24 24"><path d="M13.5 22v-8.4h2.8l.4-3.3h-3.2V8.1c0-.95.26-1.6 1.63-1.6H17V3.5c-.3-.04-1.3-.13-2.5-.13-2.5 0-4.2 1.5-4.2 4.3v2.4H7.5v3.3h2.8V22h3.2z"/></svg>
+          </a>
+          <a class="social-icon" href="https://www.tiktok.com/@coffee.moves.friendship" target="_blank" rel="noopener" aria-label="TikTok">
+            <svg viewBox="0 0 24 24"><path d="M16.6 5.82a4.24 4.24 0 0 1-3.02-3.02h-3.05v13.2a2.6 2.6 0 1 1-2.03-2.54V10.4a5.6 5.6 0 1 0 5.08 5.58V9.7a7.2 7.2 0 0 0 4.07 1.26V7.9a4.2 4.2 0 0 1-1.05-2.08z"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="glass-card map-card">
+        <iframe
+          src="https://www.google.com/maps?q=Tbilisi%2C%20Georgia&output=embed"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          title="cupy location map">
+        </iframe>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer data-i18n="footer_text">© 2026 cupy coffee bar. All rights reserved.</footer>
+
+<script>
+/* ===================== DATA ===================== */
+/* prices are in GEL (₾). Set price:null for items without a price yet. */
+const menuData = {
+  hot: {
+    thumbSeed: 'cat-hot',
+    en: 'Hot Drinks', ge: 'ცხელი სასმელები',
+    items: [
+      {en:'Espresso', ge:'ესპრესო', price:7}, {en:'Americano', ge:'ამერიკანო', price:7},
+      {en:'Long Black', ge:'ლონგ ბლექი', price:7}, {en:'V60', ge:'V60', price:7},
+      {en:'Cappuccino', ge:'კაპუჩინო', price:9}, {en:'Latte', ge:'ლატე', price:9},
+      {en:'Flat White', ge:'ფლეთ უაითი', price:9}, {en:'Cortado', ge:'კორტადო', price:9},
+      {en:'Hot Chocolate', ge:'ცხელი შოკოლადი', price:9},
+      {en:'Tea', ge:'ჩაი', price:4}, {en:'Turkish Coffee', ge:'თურქული ყავა', price:4},
+    ]
+  },
+  iced: {
+    thumbSeed: 'cat-iced',
+    en: 'Iced Drinks', ge: 'ყინულიანი სასმელები',
+    items: [
+      {en:'Espresso', ge:'ესპრესო', price:9}, {en:'Americano', ge:'ამერიკანო', price:9},
+      {en:'Long Black', ge:'ლონგ ბლექი', price:9}, {en:'V60', ge:'V60', price:9},
+      {en:'Cappuccino', ge:'კაპუჩინო', price:11}, {en:'Latte', ge:'ლატე', price:11},
+      {en:'Flat White', ge:'ფლეთ უაითი', price:11}, {en:'Cortado', ge:'კორტადო', price:11},
+      {en:'Hot Chocolate', ge:'ცხელი შოკოლადი', price:11},
+      {en:'Tea', ge:'ჩაი', price:6}, {en:'Turkish Coffee', ge:'თურქული ყავა', price:6},
+    ]
+  },
+  special: {
+    thumbSeed: 'cat-special',
+    en: 'Special Drinks', ge: 'სპეციალური სასმელები',
+    items: [
+      {en:'Ice-Cream Coffee', ge:'ნაყინიანი ყავა', price:12},
+      {en:'Bumble Coffee', ge:'ბამბლ ყავა', price:12},
+      {en:'Espresso Tonic', ge:'ესპრესო ტონიკი', price:12},
+      {en:'Strawberry Latte', ge:'მარწყვის ლატე', price:12},
+      {en:'Pineapple & Coconut Lemonade', ge:'ანანასისა და ქოქოსის ლიმონათი', price:12},
+      {en:'Forest Fruit Lemonade', ge:'ტყის კენკროვანთა ლიმონათი', price:12},
+      {en:'Maracuja Lemonade', ge:'მარაკუიას ლიმონათი', price:12},
+      {en:'Strawberry Lemonade', ge:'მარწყვის ლიმონათი', price:12},
+    ]
+  },
+  cocktails: {
+    thumbSeed: 'cat-cocktails',
+    en: 'Cocktails', ge: 'კოქტეილები',
+    groups: [
+      { items: [
+        {en:'Vodka Sunrise', ge:'ვოდკა სანრაიზი', price:18},
+        {en:'Gin Tonic / Gin & Juice', ge:'ჯინ თონიკი / ჯინი და წვენი', price:18},
+        {en:'Whiskey-Cola', ge:'ვისკი-კოლა', price:18},
+      ]},
+      { items: [
+        {en:'Cupy Martini', ge:'Cupy მარტინი', price:20},
+        {en:'Pink Velvet', ge:'პინკ ველვეტი', price:20},
+        {en:'Irish Cupy', ge:'Irish Cupy', price:20},
+      ]}
+    ]
+  },
+  matcha: {
+    thumbSeed: 'cat-matcha',
+    en: 'Matcha', ge: 'მაჩა',
+    items: [
+      {en:'Tea', ge:'ჩაი', price:10}, {en:'Latte', ge:'ლატე', price:10},
+      {en:'Iced Latte', ge:'ცივი ლატე', price:15}, {en:'Dirty', ge:'დირთი', price:15},
+      {en:'Tonic', ge:'ტონიკი', price:15}, {en:'Strawberry', ge:'მარწყვის', price:15},
+    ]
+  },
+  edibles: {
+    thumbSeed: 'cat-edibles',
+    en: 'Edibles', ge: 'საჭმელები',
+    items: [
+      {en:'Croissant', ge:'კრუასანი'}, {en:'Cinnamon Roll', ge:'დარიჩინის რულეტი'},
+      {en:'Banana Bread', ge:'ბანანის პური'}, {en:'Cheesecake', ge:'ჩიზქეიქი'},
+    ]
+  }
+};
+
+/* Team photos load from /Team/<file>.jpg first; if that 404s, .jpeg is tried automatically,
+   then a placeholder — so it works regardless of which of the two formats each photo is in. */
+const teamData = [
+  {en:'Co-founder & Barista', ge:'თანადამფუძნებელი და ბარისტა', nameEn:'Baia', nameGe:'ბაია', file:'Team/Baia', seed:'team-baia'},
+  {en:'Co-founder & Barista', ge:'თანადამფუძნებელი და ბარისტა', nameEn:'Beso', nameGe:'ბესო', file:'Team/Beso', seed:'team-beso'},
+  {en:'Co-founder & Barista', ge:'თანადამფუძნებელი და ბარისტა', nameEn:'Miriani', nameGe:'მირიანი', file:'Team/Miriani', seed:'team-miriani'},
+];
+
+const translations = {
+  en: {
+    nav_menu:'Menu', nav_team:'Team', nav_contact:'Contact',
+    hero_tagline:'Coffee Bar',
+    hero_about:"Two friends, one shared love for coffee — cupy was born from that.",
+    scroll_hint:'Scroll',
+    eyebrow_menu:'What we pour', menu_heading:'Menu', menu_sub:"Tap a category to see everything we've got.",
+    close_btn:'✕ Close',
+    eyebrow_team:'Behind the counter', team_heading:'Team', team_sub:'The people who started cupy — and the ones who keep it running.',
+    eyebrow_contact:'Find us', contact_heading:'Contact',
+    hours_label:'Opening Hours',
+    day_mon:'Monday', day_tue:'Tuesday', day_wed:'Wednesday', day_thu:'Thursday', day_fri:'Friday', day_sat:'Saturday', day_sun:'Sunday',
+    address_val:'1 Example Street, Tbilisi, Georgia',
+    social_label:'Follow us',
+    footer_text:'© 2026 cupy coffee bar. All rights reserved.'
+  },
+  ge: {
+    nav_menu:'მენიუ', nav_team:'გუნდი', nav_contact:'კონტაქტი',
+    hero_tagline:'ყავის ბარი',
+    hero_about:'ორი მეგობარი, ერთი საერთო სიყვარული ყავისადმი — ასე დაიბადა cupy.',
+    scroll_hint:'ჩამოსქროლეთ',
+    eyebrow_menu:'რას გთავაზობთ', menu_heading:'მენიუ', menu_sub:'დააჭირეთ კატეგორიას სრული ასორტიმენტის სანახავად.',
+    close_btn:'✕ დახურვა',
+    eyebrow_team:'ბარის მიღმა', team_heading:'გუნდი', team_sub:'ისინი, ვინც cupy დააფუძნა — და ისინი, ვინც დღეს მას განაგრძობენ.',
+    eyebrow_contact:'გვიპოვეთ', contact_heading:'კონტაქტი',
+    hours_label:'სამუშაო საათები',
+    day_mon:'ორშაბათი', day_tue:'სამშაბათი', day_wed:'ოთხშაბათი', day_thu:'ხუთშაბათი', day_fri:'პარასკევი', day_sat:'შაბათი', day_sun:'კვირა',
+    address_val:'მაგალითის ქუჩა 1, თბილისი, საქართველო',
+    social_label:'გამოგვყევით',
+    footer_text:'© 2026 cupy coffee bar. ყველა უფლება დაცულია.'
+  }
+};
+
+let currentLang = 'en';
+let currentModalCat = null;
+
+/* ===================== LANG TOGGLE ===================== */
+function setLang(lang) {
+  currentLang = lang;
+  document.getElementById('htmlRoot').lang = lang;
+  document.getElementById('btnEn').classList.toggle('active', lang==='en');
+  document.getElementById('btnGe').classList.toggle('active', lang==='ge');
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (translations[lang][key]) el.textContent = translations[lang][key];
+  });
+  buildCategoryRow();
+  buildTeam();
+  if (currentModalCat) openMenu(currentModalCat);
+}
+
+/* ===================== MENU ===================== */
+function buildCategoryRow(){
+  const row = document.getElementById('catRow');
+  row.innerHTML = '';
+  Object.keys(menuData).forEach(key => {
+    const cat = menuData[key];
+    const btn = document.createElement('button');
+    btn.className = 'cat-btn';
+    btn.onclick = () => openMenu(key);
+    btn.innerHTML = `
+      <div class="cat-thumb"><img src="https://picsum.photos/seed/${cat.thumbSeed}/300/300" alt="${cat[currentLang]}"></div>
+      <div class="cat-label">${cat[currentLang]}</div>`;
+    row.appendChild(btn);
+  });
+}
+
+function itemCardHTML(item, imgKey, i){
+  const priceHTML = (item.price !== undefined && item.price !== null)
+    ? `<div class="price">${item.price}₾</div>` : '';
+  return `<div class="item-card">
+      <div class="thumb"><img src="https://picsum.photos/seed/${imgKey}${i}/300/300" alt="${item[currentLang]}"></div>
+      <div class="name">${item[currentLang]}</div>
+      ${priceHTML}
+    </div>`;
+}
+
+function openMenu(key){
+  currentModalCat = key;
+  const cat = menuData[key];
+  document.getElementById('modalTitle').textContent = cat[currentLang];
+  const grid = document.getElementById('modalGrid');
+  grid.innerHTML = '';
+
+  if (cat.groups) {
+    // e.g. cocktails: rendered as separate price-tier groups
+    cat.groups.forEach((group, gi) => {
+      if (gi > 0) grid.insertAdjacentHTML('beforeend', `<div class="group-divider"></div>`);
+      group.items.forEach((item, i) => grid.insertAdjacentHTML('beforeend', itemCardHTML(item, key+gi, i)));
+    });
+  } else if (cat.items && cat.items.length) {
+    cat.items.forEach((item, i) => grid.insertAdjacentHTML('beforeend', itemCardHTML(item, key, i)));
+  } else {
+    const note = currentLang === 'en' ? 'Coming soon.' : 'მალე დაემატება.';
+    grid.innerHTML = `<div class="empty-note">${note}</div>`;
+  }
+
+  document.getElementById('menuModal').classList.add('open');
+}
+function closeMenu(){
+  document.getElementById('menuModal').classList.remove('open');
+  currentModalCat = null;
+}
+
+/* ===================== TEAM ===================== */
+function teamImgFallback(img){
+  const stage = img.dataset.stage || '0';
+  if (stage === '0') {
+    img.dataset.stage = '1';
+    img.src = img.dataset.file + '.jpeg';
+  } else {
+    img.onerror = null;
+    img.src = `https://picsum.photos/seed/${img.dataset.seed}/300/300`;
+  }
+}
+
+function buildTeam(){
+  const track = document.getElementById('teamTrack');
+  track.innerHTML = '';
+  teamData.forEach(person => {
+    const card = document.createElement('div');
+    card.className = 'team-card';
+    const name = currentLang === 'en' ? person.nameEn : person.nameGe;
+    const role = person[currentLang];
+    card.innerHTML = `
+      <div class="team-photo"><img src="${person.file}.jpg" data-file="${person.file}" data-seed="${person.seed}" onerror="teamImgFallback(this)" alt="${name}"></div>
+      <div class="team-name">${name}</div>
+      <div class="team-role">${role}</div>`;
+    track.appendChild(card);
+  });
+
+  const controls = document.querySelector('.team-controls');
+  requestAnimationFrame(() => {
+    controls.classList.toggle('hidden', track.scrollWidth <= track.clientWidth + 4);
+  });
+}
+function scrollTeam(dir){
+  const track = document.getElementById('teamTrack');
+  const cardWidth = track.querySelector('.team-card').getBoundingClientRect().width + 28;
+  track.scrollBy({ left: dir * cardWidth * 3, behavior:'smooth' });
+}
+
+/* ===================== HERO CROSSFADE ===================== */
+(function heroCycle(){
+  const slides = document.querySelectorAll('.hero-slide');
+  const dots = document.querySelectorAll('.hero-dots span');
+  let idx = 0;
+  setInterval(() => {
+    slides[idx].classList.remove('active');
+    dots[idx].classList.remove('active');
+    idx = (idx + 1) % slides.length;
+    slides[idx].classList.add('active');
+    dots[idx].classList.add('active');
+  }, 4500);
+})();
+
+/* ===================== HEADER SCROLL STATE ===================== */
+window.addEventListener('scroll', () => {
+  document.getElementById('siteHeader').classList.toggle('scrolled', window.scrollY > 40);
+});
+
+/* ===================== ESC CLOSES MODAL ===================== */
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMenu(); });
+
+/* ===================== INIT ===================== */
+buildCategoryRow();
+buildTeam();
+</script>
+
+</body>
+</html>
