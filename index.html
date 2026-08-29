@@ -64,22 +64,22 @@
   button { font-family: inherit; cursor:pointer; }
   a { color: inherit; }
 
-  /* ambient texture across the whole page — uses your cupywall.svg once it's uploaded
-     alongside this file; the dark gradient keeps text legible over it. Tweak the two
-     rgba alpha values below (currently 0.86) to let more/less of the wall show through. */
+  /* ambient texture — pulls in cupywall.svg (place it at the repo root, next to this file).
+     If it still looks too dark/light once it's live, this is the one place to tune it:
+     lower the two rgba alpha values (currently 0.55) to show more of the wall, raise them
+     to dim it for readability. background-attachment is intentionally NOT "fixed" — that
+     property silently fails to paint on many mobile browsers, which is the most likely
+     reason the wall wasn't showing up before. */
   body::before {
     content:'';
     position: fixed; inset:0; z-index:-2;
     background-color: var(--clr-bg);
     background-image:
-      linear-gradient(180deg, rgba(11,11,12,0.86), rgba(11,11,12,0.86)),
-      radial-gradient(circle at 12% 8%, rgba(255,121,0,0.10), transparent 45%),
-      radial-gradient(circle at 88% 92%, rgba(255,121,0,0.08), transparent 40%),
+      linear-gradient(180deg, rgba(11,11,12,0.55), rgba(11,11,12,0.55)),
       url('cupywall.svg');
-    background-size: cover, cover, cover, cover;
-    background-position: center, center, center, center;
-    background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
-    background-attachment: fixed, fixed, fixed, fixed;
+    background-size: cover, cover;
+    background-position: center, center;
+    background-repeat: no-repeat, no-repeat;
   }
 
   .eyebrow {
@@ -185,62 +185,80 @@
   .lang-toggle button.active { background: var(--clr-accent); color:#fff; }
 
   /* ===================== HERO ===================== */
-  #hero {
+  /* Banner: a horizontally-scrollable strip of images, one full-width slide at a time.
+     Height scales with viewport width (clamp) instead of using the full screen height —
+     recommended source images: landscape, ~1920×960px (2:1), same aspect ratio across
+     all slides so the crossfade/scroll doesn't jump; keep each under ~400KB. */
+  #heroBanner {
     position: relative;
-    height: 100svh;
-    min-height: 560px;
-    display:flex; align-items:flex-end; justify-content:center;
-    padding: 0;
-    overflow:hidden;
+    height: clamp(280px, 42vw, 560px);
+    overflow: hidden;
   }
+  .hero-track {
+    display:flex;
+    height:100%;
+    overflow-x:auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+  }
+  .hero-track::-webkit-scrollbar { display:none; }
   .hero-slide {
-    position:absolute; inset:0;
-    background-size: cover; background-position:center;
-    opacity:0; transform: scale(1.04);
-    transition: opacity 1.6s ease, transform 6s ease;
+    flex: 0 0 100%;
+    height:100%;
+    scroll-snap-align: start;
+    background-size: cover;
+    background-position: center;
   }
-  .hero-slide.active { opacity:1; transform: scale(1); }
-  #hero::after {
+  #heroBanner::after {
     content:'';
-    position:absolute; inset:0;
-    background: linear-gradient(180deg, rgba(11,11,12,0.15) 0%, rgba(11,11,12,0.25) 45%, rgba(11,11,12,0.92) 100%);
-    z-index:1;
+    position:absolute; inset:0; pointer-events:none;
+    background: linear-gradient(180deg, rgba(11,11,12,0) 55%, rgba(11,11,12,0.55) 100%);
   }
-  .hero-content {
-    position:relative; z-index:2;
-    width:100%; max-width: 480px;
-    margin: 0 auto;
-    padding: 28px 26px clamp(40px, 8vw, 64px);
+  .hero-arrow {
+    position:absolute; top:50%; transform: translateY(-50%);
+    z-index:3; width:42px; height:42px; border-radius: var(--radius-btn);
+    background: rgba(11,11,12,0.45); border: 1px solid rgba(255,255,255,0.25);
+    color:#fff; display:flex; align-items:center; justify-content:center;
+    backdrop-filter: blur(6px);
+    transition: background .2s, border-color .2s;
+  }
+  .hero-arrow:hover { background: rgba(11,11,12,0.7); border-color: var(--clr-accent); }
+  .hero-arrow.prev { left: 16px; }
+  .hero-arrow.next { right: 16px; }
+  @media (max-width: 640px){ .hero-arrow { display:none; } }
+
+  .hero-dots {
+    position:absolute; bottom: 16px; left:50%; transform: translateX(-50%);
+    z-index:3; display:flex; gap:6px;
+  }
+  .hero-dots span { width:5px; height:5px; border-radius:50%; background: rgba(255,255,255,0.4); transition: background .3s, width .3s; cursor:pointer; }
+  .hero-dots span.active { background: var(--clr-accent); width: 16px; border-radius: 3px; }
+
+  /* intro block sits below the banner, in normal page flow — not overlaid on the images */
+  .hero-intro {
+    padding: clamp(36px, 7vw, 56px) 24px;
     display:flex; flex-direction:column; align-items:center; text-align:center;
     gap: 10px;
   }
-  .hero-logo svg { width: 84px; height:84px; }
+  .hero-logo svg { width: 64px; height:64px; }
   .hero-logo svg path { fill: var(--clr-accent); }
   .hero-tagline {
     font-family: var(--font-display);
-    font-size: 14px;
+    font-size: 13px;
     letter-spacing: 0.16em;
     text-transform: uppercase;
-    color: var(--clr-text);
-  }
-  .hero-about {
     color: var(--clr-muted);
-    font-size: 14px;
-    line-height: 1.6;
-    max-width: 34ch;
     margin-top: 4px;
   }
-  .hero-dots { display:flex; gap:6px; margin-top: 16px; }
-  .hero-dots span { width:5px; height:5px; border-radius:50%; background: rgba(255,255,255,0.3); transition: background .3s, width .3s; }
-  .hero-dots span.active { background: var(--clr-accent); width: 16px; border-radius: 3px; }
-
-  .scroll-cue {
-    position:absolute; bottom: 14px; left:50%; transform: translateX(-50%);
-    z-index:2; display:flex; flex-direction:column; align-items:center; gap:6px;
-    color: var(--clr-faint); font-size: 10px; letter-spacing: 0.2em; text-transform:uppercase;
-    animation: bob 2.2s ease-in-out infinite;
+  .hero-slogan {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 700;
+    font-size: clamp(20px, 3.4vw, 28px);
+    color: var(--clr-text);
+    margin-top: 2px;
   }
-  @keyframes bob { 0%,100%{ transform: translate(-50%,0);} 50%{ transform: translate(-50%,6px);} }
 
   /* ===================== MENU ===================== */
   #menu { background: var(--clr-bg-alt); }
@@ -428,23 +446,31 @@
 
 <!-- ===================== HERO ===================== -->
 <section id="hero">
-  <div class="hero-slide active" style="background-image:url('https://picsum.photos/seed/cupy1/1600/1200')"></div>
-  <div class="hero-slide" style="background-image:url('https://picsum.photos/seed/cupy2/1600/1200')"></div>
-  <div class="hero-slide" style="background-image:url('https://picsum.photos/seed/cupy3/1600/1200')"></div>
-  <div class="hero-slide" style="background-image:url('https://picsum.photos/seed/cupy4/1600/1200')"></div>
+  <div id="heroBanner">
+    <div class="hero-track" id="heroTrack">
+      <div class="hero-slide" style="background-image:url('https://picsum.photos/seed/cupy1/1600/900')"></div>
+      <div class="hero-slide" style="background-image:url('https://picsum.photos/seed/cupy2/1600/900')"></div>
+      <div class="hero-slide" style="background-image:url('https://picsum.photos/seed/cupy3/1600/900')"></div>
+      <div class="hero-slide" style="background-image:url('https://picsum.photos/seed/cupy4/1600/900')"></div>
+    </div>
+    <button class="hero-arrow prev" onclick="scrollHero(-1)" aria-label="Previous slide">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+    <button class="hero-arrow next" onclick="scrollHero(1)" aria-label="Next slide">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+    </button>
+    <div class="hero-dots" id="heroDots"></div>
+  </div>
 
-  <div class="hero-content">
+  <div class="hero-intro">
     <div class="hero-logo">
       <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <g><path d="M69.8642,31.4979c6.9432,16.0445-.9626,15.6623-9.4727,22.526-9.9846,8.053,22.1024,15.8641,23.7586,6.4504l-7.6275-.9196c7.3232-.0768,19.2188-3.2681,16.2495-12.0455-2.857-8.4454-13.8535-4.5229-22.9079-16.0114Z"/><path d="M63.329,23.6869c-10.5488.8349-15.9623,10.7798-22.7621,17.6688.1102-.3833.2048-.7718.2835-1.1657,1.0187-5.2665-.4462-10.6801-3.2397-15.18-.0945-.1417-.2153-.3203-.3151-.4621-.42-.6458-.8979-1.2392-1.4124-1.822-.6248-.8034-1.3442-1.4597-2.074-2.1371-.2468-.2153-.5461-.4568-.8034-.6616-.3361-.2573-.6826-.5041-1.0291-.7403,9.2204-2.1581,25.5607-1.6225,31.3524,4.4999Z"/><path d="M53.5056,41.1158c.9801,4.1301,5.1254,6.6852,9.261,5.7037,4.1301-.9801,6.6852-5.1254,5.705-9.2555-.9801-4.1301-5.1254-6.6852-9.2555-5.705-4.1356.9815-6.6907,5.1267-5.7105,9.2568ZM59.5737,39.1594c-.335-1.4115.5363-2.8249,1.9477-3.1599,1.406-.3337,2.8194.5376,3.1544,1.949.3337,1.406-.5376,2.8195-1.9436,3.1531-1.4114.335-2.8249-.5363-3.1586-1.9423Z"/><g><path d="M22.5952,17.27c.1593.0306.3927.0789.548.1163.4727.0636.8227.187,1.2689.3482,2.1819.6341,4.1667,1.8809,5.9672,3.2406.2577.206.5559.4488.8068.6648.7293.6788,1.449,1.3332,2.074,2.1382.512.5828.9899,1.1719,1.4109,1.8198.0983.1395.2221.3196.3166.4621,2.7937,4.4992,4.2557,9.9127,3.2366,15.1807-.6325,3.1981-2.4366,6.1514-4.9751,8.186-.1297.0837-.245.1948-.26.2015-.0883.0396-.3235.1505-.3461-.0438-.0671-3.4789-.6733-6.5488-2.5241-9.5104-.1479-.256-.2753-.425-.4317-.6642-.7556-1.1548-1.7491-2.1982-2.7937-3.1203-.2106-.1711-.4026-.3735-.6339-.5492-2.9907-2.3095-6.5548-3.914-8.7597-7.111-.9021-1.4154-1.4901-2.8941-1.8597-4.4253-1.0229-4.1561,2.8371-7.8928,6.9551-6.9341Z"/><path d="M22.6854,51.6c-.1593-.0309-.3925-.0795-.5478-.117-.4726-.0642-.8225-.1882-1.2684-.35-2.181-.6373-4.1639-1.8869-5.9625-3.2492-.2574-.2064-.5552-.4496-.8058-.666-.7283-.6798-1.4471-1.3353-2.0709-2.1412-.5111-.5836-.9882-1.1733-1.4082-1.8219-.0981-.1397-.2217-.3199-.316-.4626-2.7871-4.5032-4.2413-9.9189-3.2146-15.1854.6372-3.1972,2.4455-6.1478,4.9869-8.1788.1298-.0835.2453-.1945.2603-.2012.0884-.0394.3237-.15.3461.0443.0621,3.479.6638,6.5497,2.5104,9.514.1475.2562.2746.4254.4308.6649.7539,1.1559,1.7459,2.2008,2.7892,3.1243.2104.1714.4021.374.6331.5501,2.9873,2.3138,6.5491,3.9235,8.7494,7.1237.9001,1.4167,1.4859,2.8963,1.8532,4.428,1.0168,4.1576-2.8485,7.8887-6.9651,6.924Z"/></g></g>
       </svg>
     </div>
     <div class="hero-tagline" data-i18n="hero_tagline">Coffee Bar</div>
-    <p class="hero-about" data-i18n="hero_about">Two friends, one shared love for coffee — cupy was born from that.</p>
-    <div class="hero-dots"><span class="active"></span><span></span><span></span><span></span></div>
+    <p class="hero-slogan"><em>coffee.moves.friendship</em></p>
   </div>
-
-  <div class="scroll-cue" data-i18n="scroll_hint">Scroll</div>
 </section>
 
 <!-- ===================== MENU ===================== -->
@@ -499,26 +525,26 @@
       <div class="glass-card">
         <p class="eyebrow" data-i18n="hours_label">Opening Hours</p>
         <table class="hours-table">
-          <tr><td data-i18n="day_mon">Monday</td><td>08:00 – 22:00</td></tr>
-          <tr><td data-i18n="day_tue">Tuesday</td><td>08:00 – 22:00</td></tr>
-          <tr><td data-i18n="day_wed">Wednesday</td><td>08:00 – 22:00</td></tr>
-          <tr><td data-i18n="day_thu">Thursday</td><td>08:00 – 22:00</td></tr>
-          <tr><td data-i18n="day_fri">Friday</td><td>08:00 – 23:00</td></tr>
-          <tr><td data-i18n="day_sat">Saturday</td><td>09:00 – 23:00</td></tr>
-          <tr><td data-i18n="day_sun">Sunday</td><td>09:00 – 21:00</td></tr>
+          <tr><td data-i18n="day_mon">Monday</td><td>10:00 – 21:00</td></tr>
+          <tr><td data-i18n="day_tue">Tuesday</td><td>10:00 – 21:00</td></tr>
+          <tr><td data-i18n="day_wed">Wednesday</td><td>10:00 – 21:00</td></tr>
+          <tr><td data-i18n="day_thu">Thursday</td><td>10:00 – 21:00</td></tr>
+          <tr><td data-i18n="day_fri">Friday</td><td>10:00 – 21:00</td></tr>
+          <tr><td data-i18n="day_sat">Saturday</td><td>11:00 – 21:00</td></tr>
+          <tr><td data-i18n="day_sun">Sunday</td><td>11:00 – 21:00</td></tr>
         </table>
 
         <div class="info-line">
           <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
-          <span data-i18n="address_val">1 Example Street, Tbilisi, Georgia</span>
+          <span data-i18n="address_val">148 Aghmashenebli Ave., Tbilisi, Georgia</span>
         </div>
         <div class="info-line">
           <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-          <span>+995 000 000 000</span>
+          <span>+995 599 79 12 18</span>
         </div>
         <div class="info-line">
           <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="M22 6l-10 7L2 6"/></svg>
-          <span>hello@cupy.coffee</span>
+          <span>coffee.moves.friendship@gmail.com</span>
         </div>
 
         <p class="eyebrow" style="margin-top:26px;" data-i18n="social_label">Follow us</p>
@@ -537,7 +563,7 @@
 
       <div class="glass-card map-card">
         <iframe
-          src="https://www.google.com/maps?q=Tbilisi%2C%20Georgia&output=embed"
+          src="https://www.google.com/maps?q=148+Aghmashenebli+Ave.%2C+Tbilisi%2C+Georgia&output=embed"
           loading="lazy"
           referrerpolicy="no-referrer-when-downgrade"
           title="cupy location map">
@@ -638,30 +664,26 @@ const translations = {
   en: {
     nav_menu:'Menu', nav_team:'Team', nav_contact:'Contact',
     hero_tagline:'Coffee Bar',
-    hero_about:"Two friends, one shared love for coffee — cupy was born from that.",
-    scroll_hint:'Scroll',
     eyebrow_menu:'What we pour', menu_heading:'Menu', menu_sub:"Tap a category to see everything we've got.",
     close_btn:'✕ Close',
     eyebrow_team:'Behind the counter', team_heading:'Team', team_sub:'The people who started cupy — and the ones who keep it running.',
     eyebrow_contact:'Find us', contact_heading:'Contact',
     hours_label:'Opening Hours',
     day_mon:'Monday', day_tue:'Tuesday', day_wed:'Wednesday', day_thu:'Thursday', day_fri:'Friday', day_sat:'Saturday', day_sun:'Sunday',
-    address_val:'1 Example Street, Tbilisi, Georgia',
+    address_val:'148 Aghmashenebli Ave., Tbilisi, Georgia',
     social_label:'Follow us',
     footer_text:'© 2026 cupy coffee bar. All rights reserved.'
   },
   ge: {
     nav_menu:'მენიუ', nav_team:'გუნდი', nav_contact:'კონტაქტი',
     hero_tagline:'ყავის ბარი',
-    hero_about:'ორი მეგობარი, ერთი საერთო სიყვარული ყავისადმი — ასე დაიბადა cupy.',
-    scroll_hint:'ჩამოსქროლეთ',
     eyebrow_menu:'რას გთავაზობთ', menu_heading:'მენიუ', menu_sub:'დააჭირეთ კატეგორიას სრული ასორტიმენტის სანახავად.',
     close_btn:'✕ დახურვა',
     eyebrow_team:'ბარის მიღმა', team_heading:'გუნდი', team_sub:'ისინი, ვინც cupy დააფუძნა — და ისინი, ვინც დღეს მას განაგრძობენ.',
     eyebrow_contact:'გვიპოვეთ', contact_heading:'კონტაქტი',
     hours_label:'სამუშაო საათები',
     day_mon:'ორშაბათი', day_tue:'სამშაბათი', day_wed:'ოთხშაბათი', day_thu:'ხუთშაბათი', day_fri:'პარასკევი', day_sat:'შაბათი', day_sun:'კვირა',
-    address_val:'მაგალითის ქუჩა 1, თბილისი, საქართველო',
+    address_val:'აღმაშენებლის გამზ. 148, თბილისი, საქართველო',
     social_label:'გამოგვყევით',
     footer_text:'© 2026 cupy coffee bar. ყველა უფლება დაცულია.'
   }
@@ -776,18 +798,47 @@ function scrollTeam(dir){
   track.scrollBy({ left: dir * cardWidth * 3, behavior:'smooth' });
 }
 
-/* ===================== HERO CROSSFADE ===================== */
-(function heroCycle(){
-  const slides = document.querySelectorAll('.hero-slide');
-  const dots = document.querySelectorAll('.hero-dots span');
-  let idx = 0;
+/* ===================== HERO BANNER (scrollable) ===================== */
+(function heroBanner(){
+  const track = document.getElementById('heroTrack');
+  const slides = track.querySelectorAll('.hero-slide');
+  const dotsWrap = document.getElementById('heroDots');
+  let lastInteraction = 0;
+
+  slides.forEach((_, i) => {
+    const dot = document.createElement('span');
+    if (i === 0) dot.classList.add('active');
+    dot.onclick = () => goToSlide(i);
+    dotsWrap.appendChild(dot);
+  });
+  const dots = dotsWrap.querySelectorAll('span');
+
+  function currentIndex(){
+    return Math.round(track.scrollLeft / track.clientWidth);
+  }
+  function goToSlide(i){
+    track.scrollTo({ left: i * track.clientWidth, behavior:'smooth' });
+  }
+  function updateDots(){
+    const i = currentIndex();
+    dots.forEach((d, di) => d.classList.toggle('active', di === i));
+  }
+
+  window.scrollHero = function(dir){
+    lastInteraction = Date.now();
+    goToSlide((currentIndex() + dir + slides.length) % slides.length);
+  };
+
+  track.addEventListener('scroll', () => {
+    lastInteraction = Date.now();
+    updateDots();
+  }, { passive:true });
+
+  // gentle autoplay, pauses for a while after the visitor interacts manually
   setInterval(() => {
-    slides[idx].classList.remove('active');
-    dots[idx].classList.remove('active');
-    idx = (idx + 1) % slides.length;
-    slides[idx].classList.add('active');
-    dots[idx].classList.add('active');
-  }, 4500);
+    if (Date.now() - lastInteraction < 6000) return;
+    goToSlide((currentIndex() + 1) % slides.length);
+  }, 5000);
 })();
 
 /* ===================== HEADER SCROLL STATE ===================== */
