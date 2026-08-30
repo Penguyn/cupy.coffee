@@ -46,7 +46,7 @@
     --clr-faint: rgba(255,255,255,0.4);
 
     /* ---- Shape ---- */
-    --radius-btn: 12px;
+    --radius-btn: 8px;
     --radius-card: 20px;
     --radius-img: 16px;
   }
@@ -169,8 +169,10 @@
     border-radius: var(--radius-btn);
     overflow:hidden;
     font-family: var(--font-display);
+    font-style: italic;
     font-size: 12px;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
   }
   .lang-toggle button {
     background: transparent; border:none; color: var(--clr-faint);
@@ -262,11 +264,6 @@
 
   /* ===================== MENU ===================== */
   #menu {
-    background: rgba(20,19,17,0.35);
-    backdrop-filter: blur(24px) saturate(140%);
-    -webkit-backdrop-filter: blur(24px) saturate(140%);
-    border-top: 1px solid var(--clr-border);
-    border-bottom: 1px solid var(--clr-border);
   }
   .cat-row {
     display:grid;
@@ -347,6 +344,13 @@
   .empty-note { grid-column: 1/-1; text-align:center; color: var(--clr-muted); padding: 20px 0; font-size:14px; }
 
   /* ===================== TEAM ===================== */
+  #team {
+    background: rgba(20,19,17,0.35);
+    backdrop-filter: blur(24px) saturate(140%);
+    -webkit-backdrop-filter: blur(24px) saturate(140%);
+    border-top: 1px solid var(--clr-border);
+    border-bottom: 1px solid var(--clr-border);
+  }
   #team .wrap { position:relative; }
   .team-track-wrap { margin-top: 40px; position:relative; }
   .team-track {
@@ -385,10 +389,6 @@
 
   /* ===================== CONTACT ===================== */
   #contact {
-    background: rgba(20,19,17,0.35);
-    backdrop-filter: blur(24px) saturate(140%);
-    -webkit-backdrop-filter: blur(24px) saturate(140%);
-    border-top: 1px solid var(--clr-border);
   }
   .contact-grid {
     display:grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 36px;
@@ -429,6 +429,9 @@
     padding: 28px clamp(20px,6vw,48px);
     text-align:center; font-size:12px; color: var(--clr-faint);
     border-top: 1px solid var(--clr-border);
+    background: rgba(20,19,17,0.35);
+    backdrop-filter: blur(24px) saturate(140%);
+    -webkit-backdrop-filter: blur(24px) saturate(140%);
   }
 </style>
 </head>
@@ -648,18 +651,33 @@ const menuData = {
   matcha: {
     thumbSeed: 'cat-matcha',
     en: 'Matcha', ge: 'მაჩა',
-    items: [
-      {en:'Tea', ge:'ჩაი', price:10}, {en:'Latte', ge:'ლატე', price:10},
-      {en:'Iced Latte', ge:'ცივი ლატე', price:15}, {en:'Dirty', ge:'დირთი', price:15},
-      {en:'Tonic', ge:'ტონიკი', price:15}, {en:'Strawberry', ge:'მარწყვის', price:15},
+    groups: [
+      { items: [
+        {en:'Tea', ge:'ჩაი', price:10},
+        {en:'Latte', ge:'ლატე', price:10},
+      ]},
+      { items: [
+        {en:'Iced Latte', ge:'ცივი ლატე', price:15},
+        {en:'Dirty', ge:'დირთი', price:15},
+        {en:'Tonic', ge:'ტონიკი', price:15},
+        {en:'Strawberry', ge:'მარწყვის', price:15},
+      ]}
     ]
   },
   edibles: {
     thumbSeed: 'cat-edibles',
     en: 'Edibles', ge: 'საჭმელები',
-    items: [
-      {en:'Croissant', ge:'კრუასანი'}, {en:'Cinnamon Roll', ge:'დარიჩინის რულეტი'},
-      {en:'Banana Bread', ge:'ბანანის პური'}, {en:'Cheesecake', ge:'ჩიზქეიქი'},
+    groups: [
+      { items: [
+        {en:'Chicken Croissant', ge:'ქათმის კრუასანი', price:12},
+        {en:'Ham & Cheese Sandwich', ge:'ლორისა და ყველის სენდვიჩი', price:12},
+        {en:'Veggie Sandwich', ge:'ვეგეტარიანული სენდვიჩი', price:12},
+      ]},
+      { items: [
+        {en:'Tiramisu', ge:'ტირამისუ', price:12},
+        {en:'Mango-Maracuja Panna Cotta', ge:'მანგო-მარაკუიას პანა-კოტა', price:10},
+        {en:'Churchkhela', ge:'ჩურჩხელა', price:5},
+      ]}
     ]
   }
 };
