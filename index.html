@@ -262,6 +262,18 @@
     text-shadow: 0 2px 12px rgba(0,0,0,0.4);
   }
 
+  /* ===================== ONE SPACE, THREE FACES ===================== */
+  .space-list { display:flex; flex-direction:column; gap: 36px; margin-top: 36px; }
+  .space-card { }
+  .space-img {
+    width:100%; aspect-ratio: 3/1; border-radius: var(--radius-img); overflow:hidden;
+    background: rgba(255,255,255,0.05); border: 1px solid var(--clr-border);
+    margin-bottom: 16px;
+  }
+  .space-img img { width:100%; height:100%; object-fit:cover; }
+  .space-title { font-family: var(--font-display); font-size: 20px; margin-bottom: 6px; }
+  .space-body { color: var(--clr-muted); font-size: 14px; line-height: 1.6; max-width: 60ch; }
+
   /* ===================== MENU ===================== */
   #menu {
   }
@@ -352,6 +364,7 @@
     border-bottom: 1px solid var(--clr-border);
   }
   #team .wrap { position:relative; }
+  .team-story { color: var(--clr-muted); font-size: 14px; line-height: 1.7; max-width: 64ch; margin: 16px auto 0; }
   .team-track-wrap { margin-top: 40px; position:relative; }
   .team-track {
     display:flex; gap: clamp(16px,3vw,28px);
@@ -405,6 +418,18 @@
   .hours-table td:first-child { color: var(--clr-muted); }
   .hours-table td:last-child { text-align:right; }
   .hours-table tr:last-child td { border-bottom:none; }
+  /* NOTE: status is a static placeholder for now — swap .open/.closed and the label
+     via JS later, based on real Tbilisi time vs the hours table above. */
+  .status-badge {
+    display:inline-flex; align-items:center; gap:7px;
+    font-family: var(--font-display); font-size: 12px; letter-spacing: 0.06em; text-transform:uppercase;
+    margin-left: 10px; vertical-align: middle;
+  }
+  .status-badge .dot { width:7px; height:7px; border-radius:50%; }
+  .status-badge.open .dot { background: #34c759; box-shadow: 0 0 6px rgba(52,199,89,0.7); }
+  .status-badge.open { color: #34c759; }
+  .status-badge.closed .dot { background: #ff4d4d; box-shadow: 0 0 6px rgba(255,77,77,0.6); }
+  .status-badge.closed { color: #ff4d4d; }
 
   .info-line { display:flex; gap:12px; align-items:flex-start; margin-top:14px; font-size:14px; color: var(--clr-text); }
   .info-line svg { width:18px; height:18px; flex-shrink:0; margin-top:2px; }
@@ -488,6 +513,32 @@
   </div>
 </section>
 
+<!-- ===================== ONE SPACE, THREE FACES ===================== -->
+<section id="onespace">
+  <div class="wrap">
+    <p class="eyebrow" data-i18n="eyebrow_onespace">The space</p>
+    <h2 class="section-heading" data-i18n="onespace_heading">One Space, Three Faces</h2>
+
+    <div class="space-list">
+      <div class="space-card">
+        <div class="space-img"><img src="https://picsum.photos/seed/space-takeaway/1500/500" alt=""></div>
+        <div class="space-title" data-i18n="onespace_1_title">Takeaway</div>
+        <p class="space-body" data-i18n="onespace_1_body">You can takeaway our honest drinks and edibles with you.</p>
+      </div>
+      <div class="space-card">
+        <div class="space-img"><img src="https://picsum.photos/seed/space-workstation/1500/500" alt=""></div>
+        <div class="space-title" data-i18n="onespace_2_title">Workstation</div>
+        <p class="space-body" data-i18n="onespace_2_body">You can have a calm workday in a creative space.</p>
+      </div>
+      <div class="space-card">
+        <div class="space-img"><img src="https://picsum.photos/seed/space-social/1500/500" alt=""></div>
+        <div class="space-title" data-i18n="onespace_3_title">Social Space</div>
+        <p class="space-body" data-i18n="onespace_3_body">After a hard day you can socialize with your friends or find new ones.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ===================== MENU ===================== -->
 <section id="menu">
   <div class="wrap">
@@ -513,8 +564,9 @@
 <section id="team">
   <div class="wrap">
     <p class="eyebrow" data-i18n="eyebrow_team">Behind the counter</p>
-    <h2 class="section-heading" data-i18n="team_heading">Team</h2>
+    <h2 class="section-heading" data-i18n="team_heading">Team &amp; Story</h2>
     <p class="section-sub" data-i18n="team_sub">The people who started cupy — and the ones who keep it running.</p>
+    <p class="team-story" data-i18n="team_story">[Our story goes here — placeholder text, to be replaced.]</p>
 
     <div class="team-track-wrap">
       <div class="team-track" id="teamTrack"></div>
@@ -538,7 +590,10 @@
 
     <div class="contact-grid">
       <div class="glass-card">
-        <p class="eyebrow" data-i18n="hours_label">Opening Hours</p>
+        <p class="eyebrow">
+          <span data-i18n="hours_label">Opening Hours</span>
+          <span class="status-badge open"><span class="dot"></span><span data-i18n="status_open">Open Now</span></span>
+        </p>
         <table class="hours-table">
           <tr><td data-i18n="day_mon">Monday</td><td>10:00 – 21:00</td></tr>
           <tr><td data-i18n="day_tue">Tuesday</td><td>10:00 – 21:00</td></tr>
@@ -695,11 +750,16 @@ const translations = {
     nav_menu:'Menu', nav_team:'Team', nav_contact:'Contact',
     hero_tagline:'Coffee Bar',
     hero_slogan:'coffee.moves.friendship',
+    eyebrow_onespace:'The space', onespace_heading:'One Space, Three Faces',
+    onespace_1_title:'Takeaway', onespace_1_body:'You can takeaway our honest drinks and edibles with you.',
+    onespace_2_title:'Workstation', onespace_2_body:'You can have a calm workday in a creative space.',
+    onespace_3_title:'Social Space', onespace_3_body:'After a hard day you can socialize with your friends or find new ones.',
     eyebrow_menu:'What we pour', menu_heading:'Menu', menu_sub:"Tap a category to see everything we've got.",
     close_btn:'✕ Close',
-    eyebrow_team:'Behind the counter', team_heading:'Team', team_sub:'The people who started cupy — and the ones who keep it running.',
+    eyebrow_team:'Behind the counter', team_heading:'Team & Story', team_sub:'The people who started cupy — and the ones who keep it running.',
+    team_story:'[Our story goes here — placeholder text, to be replaced.]',
     eyebrow_contact:'Find us', contact_heading:'Contact',
-    hours_label:'Opening Hours',
+    hours_label:'Opening Hours', status_open:'Open Now', status_closed:'Closed',
     day_mon:'Monday', day_tue:'Tuesday', day_wed:'Wednesday', day_thu:'Thursday', day_fri:'Friday', day_sat:'Saturday', day_sun:'Sunday',
     address_val:'148 Aghmashenebli Ave., Tbilisi, Georgia',
     social_label:'Follow us',
@@ -709,11 +769,16 @@ const translations = {
     nav_menu:'მენიუ', nav_team:'გუნდი', nav_contact:'კონტაქტი',
     hero_tagline:'ყავის ბარი',
     hero_slogan:'ყავა.ამოძრავებს.მეგობრობას',
+    eyebrow_onespace:'სივრცე', onespace_heading:'ერთი სივრცე, სამი სახე',
+    onespace_1_title:'წასაღები', onespace_1_body:'წაიღეთ ჩვენი პატიოსანი სასმელები და საჭმელები თან.',
+    onespace_2_title:'სამუშაო სივრცე', onespace_2_body:'დაისვენეთ და იმუშავეთ მშვიდად, კრეატიულ სივრცეში.',
+    onespace_3_title:'სოციალური სივრცე', onespace_3_body:'რთული დღის შემდეგ დაისვენეთ მეგობრებთან ერთად ან გაიცანით ახლები.',
     eyebrow_menu:'რას გთავაზობთ', menu_heading:'მენიუ', menu_sub:'დააჭირეთ კატეგორიას სრული ასორტიმენტის სანახავად.',
     close_btn:'✕ დახურვა',
-    eyebrow_team:'ბარის მიღმა', team_heading:'გუნდი', team_sub:'ისინი, ვინც cupy დააფუძნა — და ისინი, ვინც დღეს მას განაგრძობენ.',
+    eyebrow_team:'ბარის მიღმა', team_heading:'გუნდი და ისტორია', team_sub:'ისინი, ვინც cupy დააფუძნა — და ისინი, ვინც დღეს მას განაგრძობენ.',
+    team_story:'[აქ მალე დაემატება ჩვენი ისტორია.]',
     eyebrow_contact:'გვიპოვეთ', contact_heading:'კონტაქტი',
-    hours_label:'სამუშაო საათები',
+    hours_label:'სამუშაო საათები', status_open:'ღიაა', status_closed:'დახურულია',
     day_mon:'ორშაბათი', day_tue:'სამშაბათი', day_wed:'ოთხშაბათი', day_thu:'ხუთშაბათი', day_fri:'პარასკევი', day_sat:'შაბათი', day_sun:'კვირა',
     address_val:'აღმაშენებლის გამზ. 148, თბილისი, საქართველო',
     social_label:'გამოგვყევით',
