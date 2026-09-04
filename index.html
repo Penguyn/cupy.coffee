@@ -141,9 +141,17 @@
     -webkit-backdrop-filter: blur(14px);
     border-bottom: 1px solid var(--clr-border);
   }
-  .brand { display:flex; align-items:center; gap:10px; }
+  .brand { display:flex; align-items:center; gap:12px; }
   .brand svg { width: 46px; height:46px; }
   .brand svg path { fill: var(--clr-accent); }
+  .brand-name {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 16px;
+    letter-spacing: 0.05em;
+    color: var(--clr-text);
+    white-space: nowrap;
+  }
   .header-right { display:flex; align-items:center; gap:14px; }
   nav.desktop-nav { display:flex; gap: 28px; }
   nav.desktop-nav a {
@@ -229,44 +237,37 @@
   .hero-dots span { width:5px; height:5px; border-radius:50%; background: rgba(255,255,255,0.4); transition: background .3s, width .3s; cursor:pointer; }
   .hero-dots span.active { background: var(--clr-accent); width: 16px; border-radius: 3px; }
 
-  /* logo + tagline sit inside a small centered "liquid glass" card on top of the banner,
-     same glass treatment as the header (blur + translucency), not full-bleed anymore */
+  /* slogan sits inside a small centered "liquid glass" card on top of the banner,
+     same glass treatment as the header (blur + translucency). Card hugs the text
+     (width:fit-content) instead of a fixed size, so it never looks empty. */
   .hero-intro {
     position:absolute; inset:0; z-index:2;
     display:flex; align-items:center; justify-content:center;
     pointer-events:none;
   }
   .hero-glass-card {
-    width: min(88%, 380px);
-    aspect-ratio: 1 / 1;
-    display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center;
-    gap: 14px;
-    padding: 28px;
+    width: fit-content;
+    max-width: 90%;
+    display:flex; align-items:center; justify-content:center; text-align:center;
+    padding: 34px 46px;
     background: rgba(11,11,12,0.45);
     border: 1px solid rgba(255,255,255,0.18);
     border-radius: var(--radius-card);
     backdrop-filter: blur(16px) saturate(140%);
     -webkit-backdrop-filter: blur(16px) saturate(140%);
   }
-  .hero-logo svg { width: 76px; height:76px; }
-  .hero-logo svg path { fill: var(--clr-accent); }
-  .hero-tagline {
-    font-family: var(--font-display);
-    font-size: 15px;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: rgba(255,255,255,0.85);
-  }
   .hero-slogan {
     font-family: var(--font-display);
     font-style: italic;
     font-weight: 700;
-    font-size: clamp(22px, 4vw, 32px);
-    line-height: 1.25;
+    font-size: clamp(28px, 6vw, 56px);
+    line-height: 1.2;
     color: #fff;
+    white-space: nowrap;
   }
-  @media (max-width: 480px){
-    .hero-glass-card { aspect-ratio: auto; padding: 26px 22px; }
+  @media (max-width: 560px){
+    .hero-glass-card { padding: 24px 26px; }
+    .hero-slogan { white-space: normal; }
   }
 
   /* ===================== ONE SPACE, THREE FACES ===================== */
@@ -298,6 +299,11 @@
 
   /* ===================== MENU ===================== */
   #menu {
+    background: rgba(20,19,17,0.35);
+    backdrop-filter: blur(24px) saturate(140%);
+    -webkit-backdrop-filter: blur(24px) saturate(140%);
+    border-top: 1px solid var(--clr-border);
+    border-bottom: 1px solid var(--clr-border);
   }
   .cat-row {
     display:grid;
@@ -379,11 +385,6 @@
 
   /* ===================== TEAM ===================== */
   #team {
-    background: rgba(20,19,17,0.35);
-    backdrop-filter: blur(24px) saturate(140%);
-    -webkit-backdrop-filter: blur(24px) saturate(140%);
-    border-top: 1px solid var(--clr-border);
-    border-bottom: 1px solid var(--clr-border);
   }
   #team .wrap { position:relative; }
   .team-story { color: var(--clr-muted); font-size: 14px; line-height: 1.7; max-width: 64ch; margin: 16px auto 0; }
@@ -424,6 +425,10 @@
 
   /* ===================== CONTACT ===================== */
   #contact {
+    background: rgba(20,19,17,0.35);
+    backdrop-filter: blur(24px) saturate(140%);
+    -webkit-backdrop-filter: blur(24px) saturate(140%);
+    border-top: 1px solid var(--clr-border);
   }
   .contact-grid {
     display:grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 36px;
@@ -491,6 +496,7 @@
     <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <g><path d="M69.8642,31.4979c6.9432,16.0445-.9626,15.6623-9.4727,22.526-9.9846,8.053,22.1024,15.8641,23.7586,6.4504l-7.6275-.9196c7.3232-.0768,19.2188-3.2681,16.2495-12.0455-2.857-8.4454-13.8535-4.5229-22.9079-16.0114Z"/><path d="M63.329,23.6869c-10.5488.8349-15.9623,10.7798-22.7621,17.6688.1102-.3833.2048-.7718.2835-1.1657,1.0187-5.2665-.4462-10.6801-3.2397-15.18-.0945-.1417-.2153-.3203-.3151-.4621-.42-.6458-.8979-1.2392-1.4124-1.822-.6248-.8034-1.3442-1.4597-2.074-2.1371-.2468-.2153-.5461-.4568-.8034-.6616-.3361-.2573-.6826-.5041-1.0291-.7403,9.2204-2.1581,25.5607-1.6225,31.3524,4.4999Z"/><path d="M53.5056,41.1158c.9801,4.1301,5.1254,6.6852,9.261,5.7037,4.1301-.9801,6.6852-5.1254,5.705-9.2555-.9801-4.1301-5.1254-6.6852-9.2555-5.705-4.1356.9815-6.6907,5.1267-5.7105,9.2568ZM59.5737,39.1594c-.335-1.4115.5363-2.8249,1.9477-3.1599,1.406-.3337,2.8194.5376,3.1544,1.949.3337,1.406-.5376,2.8195-1.9436,3.1531-1.4114.335-2.8249-.5363-3.1586-1.9423Z"/><g><path d="M22.5952,17.27c.1593.0306.3927.0789.548.1163.4727.0636.8227.187,1.2689.3482,2.1819.6341,4.1667,1.8809,5.9672,3.2406.2577.206.5559.4488.8068.6648.7293.6788,1.449,1.3332,2.074,2.1382.512.5828.9899,1.1719,1.4109,1.8198.0983.1395.2221.3196.3166.4621,2.7937,4.4992,4.2557,9.9127,3.2366,15.1807-.6325,3.1981-2.4366,6.1514-4.9751,8.186-.1297.0837-.245.1948-.26.2015-.0883.0396-.3235.1505-.3461-.0438-.0671-3.4789-.6733-6.5488-2.5241-9.5104-.1479-.256-.2753-.425-.4317-.6642-.7556-1.1548-1.7491-2.1982-2.7937-3.1203-.2106-.1711-.4026-.3735-.6339-.5492-2.9907-2.3095-6.5548-3.914-8.7597-7.111-.9021-1.4154-1.4901-2.8941-1.8597-4.4253-1.0229-4.1561,2.8371-7.8928,6.9551-6.9341Z"/><path d="M22.6854,51.6c-.1593-.0309-.3925-.0795-.5478-.117-.4726-.0642-.8225-.1882-1.2684-.35-2.181-.6373-4.1639-1.8869-5.9625-3.2492-.2574-.2064-.5552-.4496-.8058-.666-.7283-.6798-1.4471-1.3353-2.0709-2.1412-.5111-.5836-.9882-1.1733-1.4082-1.8219-.0981-.1397-.2217-.3199-.316-.4626-2.7871-4.5032-4.2413-9.9189-3.2146-15.1854.6372-3.1972,2.4455-6.1478,4.9869-8.1788.1298-.0835.2453-.1945.2603-.2012.0884-.0394.3237-.15.3461.0443.0621,3.479.6638,6.5497,2.5104,9.514.1475.2562.2746.4254.4308.6649.7539,1.1559,1.7459,2.2008,2.7892,3.1243.2104.1714.4021.374.6331.5501,2.9873,2.3138,6.5491,3.9235,8.7494,7.1237.9001,1.4167,1.4859,2.8963,1.8532,4.428,1.0168,4.1576-2.8485,7.8887-6.9651,6.924Z"/></g></g>
     </svg>
+    <span class="brand-name" data-i18n="brand_name">cupy | coffee bar</span>
   </div>
   <nav class="desktop-nav">
     <a href="#menu" data-i18n="nav_menu">Menu</a>
@@ -517,12 +523,6 @@
 
     <div class="hero-intro">
       <div class="hero-glass-card">
-        <div class="hero-logo">
-          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <g><path d="M69.8642,31.4979c6.9432,16.0445-.9626,15.6623-9.4727,22.526-9.9846,8.053,22.1024,15.8641,23.7586,6.4504l-7.6275-.9196c7.3232-.0768,19.2188-3.2681,16.2495-12.0455-2.857-8.4454-13.8535-4.5229-22.9079-16.0114Z"/><path d="M63.329,23.6869c-10.5488.8349-15.9623,10.7798-22.7621,17.6688.1102-.3833.2048-.7718.2835-1.1657,1.0187-5.2665-.4462-10.6801-3.2397-15.18-.0945-.1417-.2153-.3203-.3151-.4621-.42-.6458-.8979-1.2392-1.4124-1.822-.6248-.8034-1.3442-1.4597-2.074-2.1371-.2468-.2153-.5461-.4568-.8034-.6616-.3361-.2573-.6826-.5041-1.0291-.7403,9.2204-2.1581,25.5607-1.6225,31.3524,4.4999Z"/><path d="M53.5056,41.1158c.9801,4.1301,5.1254,6.6852,9.261,5.7037,4.1301-.9801,6.6852-5.1254,5.705-9.2555-.9801-4.1301-5.1254-6.6852-9.2555-5.705-4.1356.9815-6.6907,5.1267-5.7105,9.2568ZM59.5737,39.1594c-.335-1.4115.5363-2.8249,1.9477-3.1599,1.406-.3337,2.8194.5376,3.1544,1.949.3337,1.406-.5376,2.8195-1.9436,3.1531-1.4114.335-2.8249-.5363-3.1586-1.9423Z"/><g><path d="M22.5952,17.27c.1593.0306.3927.0789.548.1163.4727.0636.8227.187,1.2689.3482,2.1819.6341,4.1667,1.8809,5.9672,3.2406.2577.206.5559.4488.8068.6648.7293.6788,1.449,1.3332,2.074,2.1382.512.5828.9899,1.1719,1.4109,1.8198.0983.1395.2221.3196.3166.4621,2.7937,4.4992,4.2557,9.9127,3.2366,15.1807-.6325,3.1981-2.4366,6.1514-4.9751,8.186-.1297.0837-.245.1948-.26.2015-.0883.0396-.3235.1505-.3461-.0438-.0671-3.4789-.6733-6.5488-2.5241-9.5104-.1479-.256-.2753-.425-.4317-.6642-.7556-1.1548-1.7491-2.1982-2.7937-3.1203-.2106-.1711-.4026-.3735-.6339-.5492-2.9907-2.3095-6.5548-3.914-8.7597-7.111-.9021-1.4154-1.4901-2.8941-1.8597-4.4253-1.0229-4.1561,2.8371-7.8928,6.9551-6.9341Z"/><path d="M22.6854,51.6c-.1593-.0309-.3925-.0795-.5478-.117-.4726-.0642-.8225-.1882-1.2684-.35-2.181-.6373-4.1639-1.8869-5.9625-3.2492-.2574-.2064-.5552-.4496-.8058-.666-.7283-.6798-1.4471-1.3353-2.0709-2.1412-.5111-.5836-.9882-1.1733-1.4082-1.8219-.0981-.1397-.2217-.3199-.316-.4626-2.7871-4.5032-4.2413-9.9189-3.2146-15.1854.6372-3.1972,2.4455-6.1478,4.9869-8.1788.1298-.0835.2453-.1945.2603-.2012.0884-.0394.3237-.15.3461.0443.0621,3.479.6638,6.5497,2.5104,9.514.1475.2562.2746.4254.4308.6649.7539,1.1559,1.7459,2.2008,2.7892,3.1243.2104.1714.4021.374.6331.5501,2.9873,2.3138,6.5491,3.9235,8.7494,7.1237.9001,1.4167,1.4859,2.8963,1.8532,4.428,1.0168,4.1576-2.8485,7.8887-6.9651,6.924Z"/></g></g>
-          </svg>
-        </div>
-        <div class="hero-tagline" data-i18n="hero_tagline">Coffee Bar</div>
         <p class="hero-slogan" data-i18n="hero_slogan">coffee.moves.friendship</p>
       </div>
     </div>
@@ -782,6 +782,7 @@ const translations = {
   en: {
     nav_menu:'Menu', nav_team:'Team', nav_contact:'Contact',
     hero_tagline:'Coffee Bar',
+    brand_name:'cupy | coffee bar',
     hero_slogan:'coffee.moves.friendship',
     eyebrow_onespace:'The space', onespace_heading:'One Space, Three Faces',
     onespace_1_title:'Takeaway', onespace_1_body:'You can takeaway our honest drinks and edibles with you.',
@@ -801,6 +802,7 @@ const translations = {
   ge: {
     nav_menu:'მენიუ', nav_team:'გუნდი', nav_contact:'კონტაქტი',
     hero_tagline:'ყავის ბარი',
+    brand_name:'cupy | ყავის ბარი',
     hero_slogan:'ყავა.ამოძრავებს.მეგობრობას',
     eyebrow_onespace:'სივრცე', onespace_heading:'ერთი სივრცე, სამი სახე',
     onespace_1_title:'წასაღები', onespace_1_body:'წაიღეთ ჩვენი პატიოსანი სასმელები და საჭმელები თან.',
