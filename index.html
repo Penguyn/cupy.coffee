@@ -136,12 +136,6 @@
     position: fixed; top:0; left:0; right:0; z-index: 200;
     display:flex; align-items:center; justify-content:space-between;
     padding: 16px clamp(20px, 6vw, 48px);
-    background: rgba(11,11,12,0.0);
-    backdrop-filter: blur(0px);
-    transition: background .3s, backdrop-filter .3s, border-color .3s;
-    border-bottom: 1px solid transparent;
-  }
-  header.scrolled {
     background: rgba(11,11,12,0.72);
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
@@ -235,44 +229,72 @@
   .hero-dots span { width:5px; height:5px; border-radius:50%; background: rgba(255,255,255,0.4); transition: background .3s, width .3s; cursor:pointer; }
   .hero-dots span.active { background: var(--clr-accent); width: 16px; border-radius: 3px; }
 
-  /* logo + tagline overlaid on the banner image itself, anchored lower-third rather than dead-center */
+  /* logo + tagline sit inside a small centered "liquid glass" card on top of the banner,
+     same glass treatment as the header (blur + translucency), not full-bleed anymore */
   .hero-intro {
     position:absolute; inset:0; z-index:2;
-    display:flex; flex-direction:column; align-items:center; justify-content:flex-end; text-align:center;
-    gap: 8px;
-    padding: 20px 24px clamp(56px, 12vh, 96px);
+    display:flex; align-items:center; justify-content:center;
     pointer-events:none;
   }
-  .hero-logo svg { width: 56px; height:56px; }
+  .hero-glass-card {
+    width: min(88%, 380px);
+    aspect-ratio: 1 / 1;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center;
+    gap: 14px;
+    padding: 28px;
+    background: rgba(11,11,12,0.45);
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: var(--radius-card);
+    backdrop-filter: blur(16px) saturate(140%);
+    -webkit-backdrop-filter: blur(16px) saturate(140%);
+  }
+  .hero-logo svg { width: 76px; height:76px; }
   .hero-logo svg path { fill: var(--clr-accent); }
   .hero-tagline {
     font-family: var(--font-display);
-    font-size: 12px;
+    font-size: 15px;
     letter-spacing: 0.16em;
     text-transform: uppercase;
-    color: rgba(255,255,255,0.8);
-    margin-top: 2px;
+    color: rgba(255,255,255,0.85);
   }
   .hero-slogan {
     font-family: var(--font-display);
     font-style: italic;
     font-weight: 700;
-    font-size: clamp(18px, 3vw, 26px);
+    font-size: clamp(22px, 4vw, 32px);
+    line-height: 1.25;
     color: #fff;
-    text-shadow: 0 2px 12px rgba(0,0,0,0.4);
+  }
+  @media (max-width: 480px){
+    .hero-glass-card { aspect-ratio: auto; padding: 26px 22px; }
   }
 
   /* ===================== ONE SPACE, THREE FACES ===================== */
-  .space-list { display:flex; flex-direction:column; gap: 36px; margin-top: 36px; }
-  .space-card { }
+  .space-list { display:flex; flex-direction:column; gap: 44px; margin-top: 36px; }
+  .space-card {
+    display:flex; align-items:center; gap: clamp(20px, 4vw, 44px);
+  }
+  .space-card:nth-child(even) { flex-direction: row-reverse; }
   .space-img {
-    width:100%; aspect-ratio: 3/1; border-radius: var(--radius-img); overflow:hidden;
+    flex: 0 0 40%;
+    aspect-ratio: 4/3; border-radius: var(--radius-img); overflow:hidden;
     background: rgba(255,255,255,0.05); border: 1px solid var(--clr-border);
-    margin-bottom: 16px;
   }
   .space-img img { width:100%; height:100%; object-fit:cover; }
-  .space-title { font-family: var(--font-display); font-size: 20px; margin-bottom: 6px; }
-  .space-body { color: var(--clr-muted); font-size: 14px; line-height: 1.6; max-width: 60ch; }
+  .space-text { flex: 1 1 auto; }
+  .space-number {
+    font-family: var(--font-display);
+    font-size: clamp(32px, 5vw, 44px);
+    color: var(--clr-accent);
+    line-height: 1;
+    margin-bottom: 10px;
+  }
+  .space-title { font-family: var(--font-display); font-size: 20px; margin-bottom: 8px; }
+  .space-body { color: var(--clr-muted); font-size: 14px; line-height: 1.6; max-width: 46ch; }
+  @media (max-width: 720px){
+    .space-card, .space-card:nth-child(even) { flex-direction: column; align-items:flex-start; }
+    .space-img { flex-basis: auto; width:100%; }
+  }
 
   /* ===================== MENU ===================== */
   #menu {
@@ -494,13 +516,15 @@
     </div>
 
     <div class="hero-intro">
-      <div class="hero-logo">
-        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <g><path d="M69.8642,31.4979c6.9432,16.0445-.9626,15.6623-9.4727,22.526-9.9846,8.053,22.1024,15.8641,23.7586,6.4504l-7.6275-.9196c7.3232-.0768,19.2188-3.2681,16.2495-12.0455-2.857-8.4454-13.8535-4.5229-22.9079-16.0114Z"/><path d="M63.329,23.6869c-10.5488.8349-15.9623,10.7798-22.7621,17.6688.1102-.3833.2048-.7718.2835-1.1657,1.0187-5.2665-.4462-10.6801-3.2397-15.18-.0945-.1417-.2153-.3203-.3151-.4621-.42-.6458-.8979-1.2392-1.4124-1.822-.6248-.8034-1.3442-1.4597-2.074-2.1371-.2468-.2153-.5461-.4568-.8034-.6616-.3361-.2573-.6826-.5041-1.0291-.7403,9.2204-2.1581,25.5607-1.6225,31.3524,4.4999Z"/><path d="M53.5056,41.1158c.9801,4.1301,5.1254,6.6852,9.261,5.7037,4.1301-.9801,6.6852-5.1254,5.705-9.2555-.9801-4.1301-5.1254-6.6852-9.2555-5.705-4.1356.9815-6.6907,5.1267-5.7105,9.2568ZM59.5737,39.1594c-.335-1.4115.5363-2.8249,1.9477-3.1599,1.406-.3337,2.8194.5376,3.1544,1.949.3337,1.406-.5376,2.8195-1.9436,3.1531-1.4114.335-2.8249-.5363-3.1586-1.9423Z"/><g><path d="M22.5952,17.27c.1593.0306.3927.0789.548.1163.4727.0636.8227.187,1.2689.3482,2.1819.6341,4.1667,1.8809,5.9672,3.2406.2577.206.5559.4488.8068.6648.7293.6788,1.449,1.3332,2.074,2.1382.512.5828.9899,1.1719,1.4109,1.8198.0983.1395.2221.3196.3166.4621,2.7937,4.4992,4.2557,9.9127,3.2366,15.1807-.6325,3.1981-2.4366,6.1514-4.9751,8.186-.1297.0837-.245.1948-.26.2015-.0883.0396-.3235.1505-.3461-.0438-.0671-3.4789-.6733-6.5488-2.5241-9.5104-.1479-.256-.2753-.425-.4317-.6642-.7556-1.1548-1.7491-2.1982-2.7937-3.1203-.2106-.1711-.4026-.3735-.6339-.5492-2.9907-2.3095-6.5548-3.914-8.7597-7.111-.9021-1.4154-1.4901-2.8941-1.8597-4.4253-1.0229-4.1561,2.8371-7.8928,6.9551-6.9341Z"/><path d="M22.6854,51.6c-.1593-.0309-.3925-.0795-.5478-.117-.4726-.0642-.8225-.1882-1.2684-.35-2.181-.6373-4.1639-1.8869-5.9625-3.2492-.2574-.2064-.5552-.4496-.8058-.666-.7283-.6798-1.4471-1.3353-2.0709-2.1412-.5111-.5836-.9882-1.1733-1.4082-1.8219-.0981-.1397-.2217-.3199-.316-.4626-2.7871-4.5032-4.2413-9.9189-3.2146-15.1854.6372-3.1972,2.4455-6.1478,4.9869-8.1788.1298-.0835.2453-.1945.2603-.2012.0884-.0394.3237-.15.3461.0443.0621,3.479.6638,6.5497,2.5104,9.514.1475.2562.2746.4254.4308.6649.7539,1.1559,1.7459,2.2008,2.7892,3.1243.2104.1714.4021.374.6331.5501,2.9873,2.3138,6.5491,3.9235,8.7494,7.1237.9001,1.4167,1.4859,2.8963,1.8532,4.428,1.0168,4.1576-2.8485,7.8887-6.9651,6.924Z"/></g></g>
-        </svg>
+      <div class="hero-glass-card">
+        <div class="hero-logo">
+          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <g><path d="M69.8642,31.4979c6.9432,16.0445-.9626,15.6623-9.4727,22.526-9.9846,8.053,22.1024,15.8641,23.7586,6.4504l-7.6275-.9196c7.3232-.0768,19.2188-3.2681,16.2495-12.0455-2.857-8.4454-13.8535-4.5229-22.9079-16.0114Z"/><path d="M63.329,23.6869c-10.5488.8349-15.9623,10.7798-22.7621,17.6688.1102-.3833.2048-.7718.2835-1.1657,1.0187-5.2665-.4462-10.6801-3.2397-15.18-.0945-.1417-.2153-.3203-.3151-.4621-.42-.6458-.8979-1.2392-1.4124-1.822-.6248-.8034-1.3442-1.4597-2.074-2.1371-.2468-.2153-.5461-.4568-.8034-.6616-.3361-.2573-.6826-.5041-1.0291-.7403,9.2204-2.1581,25.5607-1.6225,31.3524,4.4999Z"/><path d="M53.5056,41.1158c.9801,4.1301,5.1254,6.6852,9.261,5.7037,4.1301-.9801,6.6852-5.1254,5.705-9.2555-.9801-4.1301-5.1254-6.6852-9.2555-5.705-4.1356.9815-6.6907,5.1267-5.7105,9.2568ZM59.5737,39.1594c-.335-1.4115.5363-2.8249,1.9477-3.1599,1.406-.3337,2.8194.5376,3.1544,1.949.3337,1.406-.5376,2.8195-1.9436,3.1531-1.4114.335-2.8249-.5363-3.1586-1.9423Z"/><g><path d="M22.5952,17.27c.1593.0306.3927.0789.548.1163.4727.0636.8227.187,1.2689.3482,2.1819.6341,4.1667,1.8809,5.9672,3.2406.2577.206.5559.4488.8068.6648.7293.6788,1.449,1.3332,2.074,2.1382.512.5828.9899,1.1719,1.4109,1.8198.0983.1395.2221.3196.3166.4621,2.7937,4.4992,4.2557,9.9127,3.2366,15.1807-.6325,3.1981-2.4366,6.1514-4.9751,8.186-.1297.0837-.245.1948-.26.2015-.0883.0396-.3235.1505-.3461-.0438-.0671-3.4789-.6733-6.5488-2.5241-9.5104-.1479-.256-.2753-.425-.4317-.6642-.7556-1.1548-1.7491-2.1982-2.7937-3.1203-.2106-.1711-.4026-.3735-.6339-.5492-2.9907-2.3095-6.5548-3.914-8.7597-7.111-.9021-1.4154-1.4901-2.8941-1.8597-4.4253-1.0229-4.1561,2.8371-7.8928,6.9551-6.9341Z"/><path d="M22.6854,51.6c-.1593-.0309-.3925-.0795-.5478-.117-.4726-.0642-.8225-.1882-1.2684-.35-2.181-.6373-4.1639-1.8869-5.9625-3.2492-.2574-.2064-.5552-.4496-.8058-.666-.7283-.6798-1.4471-1.3353-2.0709-2.1412-.5111-.5836-.9882-1.1733-1.4082-1.8219-.0981-.1397-.2217-.3199-.316-.4626-2.7871-4.5032-4.2413-9.9189-3.2146-15.1854.6372-3.1972,2.4455-6.1478,4.9869-8.1788.1298-.0835.2453-.1945.2603-.2012.0884-.0394.3237-.15.3461.0443.0621,3.479.6638,6.5497,2.5104,9.514.1475.2562.2746.4254.4308.6649.7539,1.1559,1.7459,2.2008,2.7892,3.1243.2104.1714.4021.374.6331.5501,2.9873,2.3138,6.5491,3.9235,8.7494,7.1237.9001,1.4167,1.4859,2.8963,1.8532,4.428,1.0168,4.1576-2.8485,7.8887-6.9651,6.924Z"/></g></g>
+          </svg>
+        </div>
+        <div class="hero-tagline" data-i18n="hero_tagline">Coffee Bar</div>
+        <p class="hero-slogan" data-i18n="hero_slogan">coffee.moves.friendship</p>
       </div>
-      <div class="hero-tagline" data-i18n="hero_tagline">Coffee Bar</div>
-      <p class="hero-slogan" data-i18n="hero_slogan">coffee.moves.friendship</p>
     </div>
 
     <button class="hero-arrow prev" onclick="scrollHero(-1)" aria-label="Previous slide">
@@ -521,19 +545,28 @@
 
     <div class="space-list">
       <div class="space-card">
-        <div class="space-img"><img src="https://picsum.photos/seed/space-takeaway/1500/500" alt=""></div>
-        <div class="space-title" data-i18n="onespace_1_title">Takeaway</div>
-        <p class="space-body" data-i18n="onespace_1_body">You can takeaway our honest drinks and edibles with you.</p>
+        <div class="space-img"><img src="https://picsum.photos/seed/space-takeaway/800/600" alt=""></div>
+        <div class="space-text">
+          <div class="space-number">01</div>
+          <div class="space-title" data-i18n="onespace_1_title">Takeaway</div>
+          <p class="space-body" data-i18n="onespace_1_body">You can takeaway our honest drinks and edibles with you.</p>
+        </div>
       </div>
       <div class="space-card">
-        <div class="space-img"><img src="https://picsum.photos/seed/space-workstation/1500/500" alt=""></div>
-        <div class="space-title" data-i18n="onespace_2_title">Workstation</div>
-        <p class="space-body" data-i18n="onespace_2_body">You can have a calm workday in a creative space.</p>
+        <div class="space-img"><img src="https://picsum.photos/seed/space-workstation/800/600" alt=""></div>
+        <div class="space-text">
+          <div class="space-number">02</div>
+          <div class="space-title" data-i18n="onespace_2_title">Workstation</div>
+          <p class="space-body" data-i18n="onespace_2_body">You can have a calm workday in a creative space.</p>
+        </div>
       </div>
       <div class="space-card">
-        <div class="space-img"><img src="https://picsum.photos/seed/space-social/1500/500" alt=""></div>
-        <div class="space-title" data-i18n="onespace_3_title">Social Space</div>
-        <p class="space-body" data-i18n="onespace_3_body">After a hard day you can socialize with your friends or find new ones.</p>
+        <div class="space-img"><img src="https://picsum.photos/seed/space-social/800/600" alt=""></div>
+        <div class="space-text">
+          <div class="space-number">03</div>
+          <div class="space-title" data-i18n="onespace_3_title">Social Space</div>
+          <p class="space-body" data-i18n="onespace_3_body">After a hard day you can socialize with your friends or find new ones.</p>
+        </div>
       </div>
     </div>
   </div>
@@ -937,11 +970,6 @@ function scrollTeam(dir){
     goToSlide((currentIndex() + 1) % slides.length);
   }, 5000);
 })();
-
-/* ===================== HEADER SCROLL STATE ===================== */
-window.addEventListener('scroll', () => {
-  document.getElementById('siteHeader').classList.toggle('scrolled', window.scrollY > 40);
-});
 
 /* ===================== ESC CLOSES MODAL ===================== */
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMenu(); });
