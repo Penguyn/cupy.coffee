@@ -679,96 +679,103 @@
 /* prices are in GEL (₾). Set price:null for items without a price yet. */
 const menuData = {
   hot: {
-    thumbSeed: 'cat-hot',
+    thumbSeed: 'cat-hot', thumbImg: 'Flat White',
     en: 'Hot Drinks', ge: 'ცხელი სასმელები',
     items: [
-      {en:'Espresso', ge:'ესპრესო', price:7}, {en:'Americano', ge:'ამერიკანო', price:7},
-      {en:'Long Black', ge:'ლონგ ბლექი', price:7}, {en:'V60', ge:'V60', price:7},
-      {en:'Cappuccino', ge:'კაპუჩინო', price:9}, {en:'Latte', ge:'ლატე', price:9},
-      {en:'Flat White', ge:'ფლეთ უაითი', price:9}, {en:'Cortado', ge:'კორტადო', price:9},
-      {en:'Hot Chocolate', ge:'ცხელი შოკოლადი', price:9},
-      {en:'Tea', ge:'ჩაი', price:4}, {en:'Turkish Coffee', ge:'თურქული ყავა', price:4},
+      {en:'Espresso', ge:'ესპრესო', price:7, img:'Espresso'},
+      {en:'Americano', ge:'ამერიკანო', price:7, img:'Americano'},
+      {en:'Long Black', ge:'ლონგ ბლექი', price:7, img:'Long Black'},
+      {en:'V60', ge:'V60', price:7, img:'V60'},
+      {en:'Cappuccino', ge:'კაპუჩინო', price:9, img:'Cappuccino'},
+      {en:'Latte', ge:'ლატე', price:9, img:'Latte'},
+      {en:'Flat White', ge:'ფლეთ უაითი', price:9, img:'Flat White'},
+      {en:'Cortado', ge:'კორტადო', price:9, img:'Cortado'},
+      {en:'Hot Chocolate', ge:'ცხელი შოკოლადი', price:9, img:'Hot Chocolate'},
+      {en:'Tea', ge:'ჩაი', price:4, img:'Tea'},
+      {en:'Turkish Coffee', ge:'თურქული ყავა', price:4, img:'Turkish Coffee'},
     ]
   },
   iced: {
-    thumbSeed: 'cat-iced',
+    thumbSeed: 'cat-iced', thumbImg: 'Iced Latte',
     en: 'Iced Drinks', ge: 'ყინულიანი სასმელები',
     items: [
-      {en:'Espresso', ge:'ესპრესო', price:9}, {en:'Americano', ge:'ამერიკანო', price:9},
-      {en:'V60', ge:'V60', price:9},
-      {en:'Cappuccino', ge:'კაპუჩინო', price:11}, {en:'Latte', ge:'ლატე', price:11},
-      {en:'Cortado', ge:'კორტადო', price:11},
-      {en:'Tea', ge:'ჩაი', price:6},
+      {en:'Espresso', ge:'ესპრესო', price:9, img:'Espresso'},
+      {en:'Americano', ge:'ამერიკანო', price:9, img:'Iced Americano'},
+      {en:'V60', ge:'V60', price:9, img:'V60'},
+      {en:'Cappuccino', ge:'კაპუჩინო', price:11, img:'Iced Cappuccino'},
+      {en:'Latte', ge:'ლატე', price:11, img:'Iced Latte'},
+      {en:'Cortado', ge:'კორტადო', price:11, img:'Cortado'},
+      {en:'Tea', ge:'ჩაი', price:6, img:'Tea'},
     ]
   },
   special: {
-    thumbSeed: 'cat-special',
+    thumbSeed: 'cat-special', thumbImg: 'Strawberry Lemonade',
     en: 'Special Drinks', ge: 'სპეციალური სასმელები',
     items: [
-      {en:'Ice-Cream Coffee', ge:'ნაყინიანი ყავა', price:12},
-      {en:'Bumble Coffee', ge:'ბამბლ ყავა', price:12},
-      {en:'Espresso Tonic', ge:'ესპრესო ტონიკი', price:12},
-      {en:'Strawberry Latte', ge:'მარწყვის ლატე', price:12},
-      {en:'Pineapple & Coconut Lemonade', ge:'ანანასისა და ქოქოსის ლიმონათი', price:12},
-      {en:'Forest Fruit Lemonade', ge:'ტყის კენკროვანთა ლიმონათი', price:12},
-      {en:'Maracuja Lemonade', ge:'მარაკუიას ლიმონათი', price:12},
-      {en:'Strawberry Lemonade', ge:'მარწყვის ლიმონათი', price:12},
+      {en:'Ice-Cream Coffee', ge:'ნაყინიანი ყავა', price:12, img:null},
+      {en:'Bumble Coffee', ge:'ბამბლ ყავა', price:12, img:'Bumble Coffee'},
+      {en:'Espresso Tonic', ge:'ესპრესო ტონიკი', price:12, img:'Espresso Tonic'},
+      {en:'Strawberry Latte', ge:'მარწყვის ლატე', price:12, img:'Strawberry Latte'},
+      {en:'Pineapple & Coconut Lemonade', ge:'ანანასისა და ქოქოსის ლიმონათი', price:12, img:'Pineapple & Coconut Lemonade'},
+      {en:'Forest Fruit Lemonade', ge:'ტყის კენკროვანთა ლიმონათი', price:12, img:'Forest Fruit Lemonade'},
+      {en:'Maracuja Lemonade', ge:'მარაკუიას ლიმონათი', price:12, img:'Maracuja Lemonade'},
+      {en:'Strawberry Lemonade', ge:'მარწყვის ლიმონათი', price:12, img:'Strawberry Lemonade'},
     ]
   },
   cocktails: {
-    thumbSeed: 'cat-cocktails',
+    thumbSeed: 'cat-cocktails', thumbImg: 'Pink Velvet',
     en: 'Cocktails', ge: 'კოქტეილები',
     groups: [
       { items: [
-        {en:'Vodka Sunrise', ge:'ვოდკა სანრაიზი', price:18},
-        {en:'Gin Tonic / Gin & Juice', ge:'ჯინ თონიკი / ჯინი და წვენი', price:18},
-        {en:'Whiskey-Cola', ge:'ვისკი-კოლა', price:18},
+        {en:'Vodka Sunrise', ge:'ვოდკა სანრაიზი', price:18, img:'Vodka Sunrise'},
+        {en:'Gin Tonic / Gin & Juice', ge:'ჯინ თონიკი / ჯინი და წვენი', price:18, img:'Gin Tonic'},
+        {en:'Whiskey-Cola', ge:'ვისკი-კოლა', price:18, img:'Whiskey Cola'},
       ]},
       { items: [
-        {en:'Cupy Martini', ge:'Cupy მარტინი', price:20},
-        {en:'Pink Velvet', ge:'პინკ ველვეტი', price:20},
-        {en:'Irish Cupy', ge:'Irish Cupy', price:20},
+        {en:'Cupy Martini', ge:'Cupy მარტინი', price:20, img:'Cupy Martini'},
+        {en:'Pink Velvet', ge:'პინკ ველვეტი', price:20, img:'Pink Velvet'},
+        {en:'Irish Cupy', ge:'Irish Cupy', price:20, img:'Irish Cupy'},
       ]}
     ]
   },
   matcha: {
-    thumbSeed: 'cat-matcha',
+    thumbSeed: 'cat-matcha', thumbImg: 'Iced Matcha Latte',
     en: 'Matcha', ge: 'მაჩა',
     groups: [
       { items: [
-        {en:'Tea', ge:'ჩაი', price:10},
-        {en:'Latte', ge:'ლატე', price:10},
+        {en:'Tea', ge:'ჩაი', price:10, img:'Matcha'},
+        {en:'Latte', ge:'ლატე', price:10, img:'Matcha Latte'},
       ]},
       { items: [
-        {en:'Iced Latte', ge:'ცივი ლატე', price:15},
-        {en:'Dirty', ge:'დირთი', price:15},
-        {en:'Tonic', ge:'ტონიკი', price:15},
-        {en:'Strawberry', ge:'მარწყვის', price:15},
+        {en:'Iced Latte', ge:'ცივი ლატე', price:15, img:'Iced Matcha Latte'},
+        {en:'Dirty', ge:'დირთი', price:15, img:'Dirty Matcha Latte'},
+        {en:'Tonic', ge:'ტონიკი', price:15, img:'Matcha Tonic'},
+        {en:'Strawberry', ge:'მარწყვის', price:15, img:'Strawberry Matcha Latte'},
       ]}
     ]
   },
   edibles: {
-    thumbSeed: 'cat-edibles',
+    thumbSeed: 'cat-edibles', thumbImg: 'Ham Cheese Sandwhich',
     en: 'Edibles', ge: 'საჭმელები',
     groups: [
       { items: [
-        {en:'Chicken Croissant', ge:'ქათმის კრუასანი', price:12},
-        {en:'Ham & Cheese Sandwich', ge:'ლორისა და ყველის სენდვიჩი', price:12},
-        {en:'Veggie Sandwich', ge:'ვეგეტარიანული სენდვიჩი', price:12},
+        {en:'Chicken Croissant', ge:'ქათმის კრუასანი', price:12, img:'Chicken Croissant'},
+        {en:'Ham & Cheese Sandwich', ge:'ლორისა და ყველის სენდვიჩი', price:12, img:'Ham Cheese Sandwhich'},
+        {en:'Veggie Sandwich', ge:'ვეგეტარიანული სენდვიჩი', price:12, img:'Veggie'},
       ]},
       { items: [
-        {en:'Tiramisu', ge:'ტირამისუ', price:12},
-        {en:'Mango-Maracuja Panna Cotta', ge:'მანგო-მარაკუიას პანა-კოტა', price:10},
-        {en:'Churchkhela', ge:'ჩურჩხელა', price:5},
+        {en:'Tiramisu', ge:'ტირამისუ', price:12, img:'Tiramisu'},
+        {en:'Mango-Maracuja Panna Cotta', ge:'მანგო-მარაკუიას პანა-კოტა', price:10, img:'Mango-Maracuja Panna Cotta'},
+        {en:'Churchkhela', ge:'ჩურჩხელა', price:5, img:null},
       ]}
     ]
   },
   other: {
-    thumbSeed: 'cat-other',
+    thumbSeed: 'cat-other', thumbImg: 'Coffee Beans',
     en: 'Other', ge: 'სხვა',
     items: [
-      {en:'Coffee Beans', ge:'ყავის მარცვლები'},
-      {en:'Turkish Ground Coffee', ge:'დაფქული თურქული ყავა'},
+      {en:'Coffee Beans', ge:'ყავის მარცვლები', img:'Coffee Beans'},
+      {en:'Turkish Ground Coffee', ge:'დაფქული თურქული ყავა', img:'Turkish Ground Coffee'},
     ]
   }
 };
@@ -846,6 +853,14 @@ function setLang(lang) {
 }
 
 /* ===================== MENU ===================== */
+/* Menu item photos live in the "Menu Items" folder at the repo root, named to match
+   (e.g. "Menu Items/Espresso.png"). If a photo is missing or fails to load, it falls
+   back to a placeholder automatically instead of showing a broken image. */
+const MENU_IMG_BASE = 'Menu Items/';
+function menuImgSrc(name){
+  return encodeURI(MENU_IMG_BASE + name + '.png');
+}
+
 function buildCategoryRow(){
   const row = document.getElementById('catRow');
   row.innerHTML = '';
@@ -855,7 +870,7 @@ function buildCategoryRow(){
     btn.className = 'cat-btn';
     btn.onclick = () => openMenu(key);
     btn.innerHTML = `
-      <div class="cat-thumb"><img src="https://picsum.photos/seed/${cat.thumbSeed}/300/300" alt="${cat[currentLang]}"></div>
+      <div class="cat-thumb"><img src="${menuImgSrc(cat.thumbImg)}" onerror="this.onerror=null;this.src='https://picsum.photos/seed/${cat.thumbSeed}/300/300'" alt="${cat[currentLang]}"></div>
       <div class="cat-label">${cat[currentLang]}</div>`;
     row.appendChild(btn);
   });
@@ -864,8 +879,9 @@ function buildCategoryRow(){
 function itemCardHTML(item, imgKey, i){
   const priceHTML = (item.price !== undefined && item.price !== null)
     ? `<div class="price">${item.price}₾</div>` : '';
+  const src = item.img ? menuImgSrc(item.img) : `https://picsum.photos/seed/${imgKey}${i}/300/300`;
   return `<div class="item-card">
-      <div class="thumb"><img src="https://picsum.photos/seed/${imgKey}${i}/300/300" alt="${item[currentLang]}"></div>
+      <div class="thumb"><img src="${src}" onerror="this.onerror=null;this.src='https://picsum.photos/seed/${imgKey}${i}/300/300'" alt="${item[currentLang]}"></div>
       <div class="name">${item[currentLang]}</div>
       ${priceHTML}
     </div>`;
