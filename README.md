@@ -11,6 +11,7 @@ script, images optimized at build time, deployable to Vercel with zero configura
 | `npm install`     | Install dependencies (Node ≥ 22.23.4)                           |
 | `npm run dev`     | Dev server at http://localhost:4321                             |
 | `npm run check`   | Type-check all `.astro` / `.ts` files (`astro check`)           |
+| `npm test`        | Unit tests for the open/closed logic (Node's built-in runner)   |
 | `npm run build`   | Production build into `dist/` (optimizes images, ~1–3 min cold) |
 | `npm run preview` | Serve the production build locally                              |
 
@@ -27,7 +28,7 @@ src/
     seo/            StructuredData.astro (schema.org JSON-LD generated from the content below)
   content/          site.ts (contact details, hours, socials), menu.ts, team.ts, story.ts
   i18n/             languages.ts, messages.ts (all UI copy, English + Georgian)
-  scripts/          language.ts, carousel.ts, dialogs.ts  (bundled into one small inline module)
+  scripts/          language.ts, carousel.ts, dialogs.ts, openingStatus.ts (+ openingHours.ts)  (one small bundled module)
   styles/           global.css — @font-face, design tokens, reset
   assets/           banner/ space/ menu/ team/ placeholders/ fonts/ og/ cupywall.svg
 public/             favicon.svg, apple-touch-icon.png
@@ -46,6 +47,16 @@ vercel.json         security headers + immutable caching for hashed assets
 * **All other text** (headings, labels, accessibility strings) — `src/i18n/messages.ts`. Both languages live side by
   side; TypeScript refuses to build if the Georgian dictionary is missing a key.
 * **Page title / description** — `src/content/site.ts` (`title`, `description`).
+
+### How the Open / Closed badge works
+
+The badge in the Opening Hours card is live. In the browser, `src/scripts/openingStatus.ts` checks `site.hours`
+against the current time in `site.timeZone` (`Asia/Tbilisi`) — never the visitor's own clock or timezone — and
+switches the colour and which of the two labels ("Open Now" / "Closed Now") is shown. It re-checks at every wall-clock
+minute (so it flips at exactly 10:00 / 11:00 and 21:00), pauses while the tab is hidden and catches up when it is
+shown again. The time logic itself is in `src/scripts/openingHours.ts`, a pure module with no DOM. Change the hours in
+`src/content/site.ts` and the table, the badge and the JSON-LD all follow. Each entry covers one calendar day
+(`opens` inclusive, `closes` exclusive); hours that run past midnight are not supported.
 
 ### How the language toggle works
 
@@ -90,8 +101,8 @@ Contact section.
 
 ## Known limitations
 
-* The "Open Now" badge is a static placeholder, exactly as in the original page. Making it live needs only a time
-  check against `site.hours` in the `Asia/Tbilisi` timezone (see the comment in `Contact.astro`).
+* Without JavaScript the Open / Closed badge stays on its server-rendered default ("Open Now"); the live status needs
+  the script.
 * The Georgian version is a client-side toggle, so search engines index the English page. A separate `/ka/` page would
   be the way to get Georgian search traffic.
 * On screens ≤ 780 px the header navigation links are hidden, as in the original design.

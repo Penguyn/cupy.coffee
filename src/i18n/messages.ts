@@ -34,7 +34,7 @@ const en = {
     heading: 'Contact',
     hoursLabel: 'Opening Hours',
     statusOpen: 'Open Now',
-    statusClosed: 'Closed',
+    statusClosed: 'Closed Now',
     days: {
       mon: 'Monday',
       tue: 'Tuesday',

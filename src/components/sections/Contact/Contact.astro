@@ -22,12 +22,21 @@ const { en, ka } = messages;
       <Eyebrow>
         <span data-ka={ka.contact.hoursLabel}>{en.contact.hoursLabel}</span>{' '}
         {/*
-          Static placeholder, as in the original page. To make it live, compare the current time in
-          Asia/Tbilisi with `site.hours` and switch to `styles.closed` + `contact.statusClosed`.
+          Kept live by src/scripts/openingStatus.ts, which checks `site.hours` against the current time in
+          `site.timeZone`. It swaps the colour class and which of the two labels is hidden; the markup below
+          is what shows before it runs (and without JavaScript).
         */}
-        <span class:list={[styles.status, styles.open]}>
+        <span
+          class:list={[styles.status, styles.open]}
+          data-opening-status
+          data-time-zone={site.timeZone}
+          data-hours={JSON.stringify(site.hours)}
+          data-open-class={styles.open}
+          data-closed-class={styles.closed}
+        >
           <span class={styles.dot} aria-hidden="true"></span>
-          <span data-ka={ka.contact.statusOpen}>{en.contact.statusOpen}</span>
+          <span data-status-label="open" data-ka={ka.contact.statusOpen}>{en.contact.statusOpen}</span>
+          <span data-status-label="closed" data-ka={ka.contact.statusClosed} hidden>{en.contact.statusClosed}</span>
         </span>
       </Eyebrow>
 

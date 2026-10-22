@@ -24,6 +24,8 @@ export const site = {
     { id: 'facebook', label: 'Facebook', href: 'https://www.facebook.com/coffee.moves.friendship/' },
     { id: 'tiktok', label: 'TikTok', href: 'https://www.tiktok.com/@coffee.moves.friendship' },
   ],
+  /** The timezone `hours` are written in. "Open now" is always evaluated here, wherever the visitor is. */
+  timeZone: 'Asia/Tbilisi',
   hours: [
     { day: 'mon', opens: '10:00', closes: '21:00' },
     { day: 'tue', opens: '10:00', closes: '21:00' },
