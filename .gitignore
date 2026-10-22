@@ -1,0 +1,18 @@
+# dependencies
+/node_modules
+
+# astro
+/dist/
+/.astro/
+
+# env files (only .env.example is committed)
+.env*
+!.env.example
+
+# vercel
+.vercel
+
+# logs / OS
+npm-debug.log*
+.DS_Store
+Thumbs.db

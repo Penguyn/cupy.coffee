@@ -1,0 +1,83 @@
+---
+import Eyebrow from '@/components/ui/Eyebrow.astro';
+import Icon from '@/components/ui/Icon.astro';
+import Section from '@/components/ui/Section.astro';
+import SectionHeader from '@/components/ui/SectionHeader.astro';
+import { phoneHref, site } from '@/content/site';
+import { messages } from '@/i18n/messages';
+import styles from './Contact.module.css';
+
+const { en, ka } = messages;
+---
+
+<Section id="contact" labelledBy="contact-heading" class={styles.contact}>
+  <SectionHeader
+    eyebrow={{ en: en.contact.eyebrow, ka: ka.contact.eyebrow }}
+    heading={{ en: en.contact.heading, ka: ka.contact.heading }}
+    headingId="contact-heading"
+  />
+
+  <div class={styles.grid}>
+    <div class={styles.glassCard}>
+      <Eyebrow>
+        <span data-ka={ka.contact.hoursLabel}>{en.contact.hoursLabel}</span>{' '}
+        {/*
+          Static placeholder, as in the original page. To make it live, compare the current time in
+          Asia/Tbilisi with `site.hours` and switch to `styles.closed` + `contact.statusClosed`.
+        */}
+        <span class:list={[styles.status, styles.open]}>
+          <span class={styles.dot} aria-hidden="true"></span>
+          <span data-ka={ka.contact.statusOpen}>{en.contact.statusOpen}</span>
+        </span>
+      </Eyebrow>
+
+      <table class={styles.hours}>
+        <tbody>
+          {
+            site.hours.map(({ day, opens, closes }) => (
+              <tr>
+                <th scope="row" data-ka={ka.contact.days[day]}>
+                  {en.contact.days[day]}
+                </th>
+                <td>{`${opens} – ${closes}`}</td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+
+      <div class={styles.infoLine}>
+        <Icon name="mapPin" />
+        <span data-ka={ka.contact.address}>{en.contact.address}</span>
+      </div>
+      <div class={styles.infoLine}>
+        <Icon name="phone" />
+        <a href={phoneHref}>{site.phone}</a>
+      </div>
+      <div class={styles.infoLine}>
+        <Icon name="mail" />
+        <a href={`mailto:${site.email}`}>{site.email}</a>
+      </div>
+
+      <Eyebrow class={styles.followLabel} data-ka={ka.contact.followUs}>{en.contact.followUs}</Eyebrow>
+      <div class={styles.socials}>
+        {
+          site.socials.map(({ id, label, href }) => (
+            <a class={styles.socialIcon} href={href} target="_blank" rel="noopener" aria-label={label}>
+              <Icon name={id} />
+            </a>
+          ))
+        }
+      </div>
+    </div>
+
+    <div class:list={[styles.glassCard, styles.mapCard]}>
+      <iframe
+        src={site.mapEmbedUrl}
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+        title={en.a11y.mapTitle}
+        data-ka-title={ka.a11y.mapTitle}></iframe>
+    </div>
+  </div>
+</Section>

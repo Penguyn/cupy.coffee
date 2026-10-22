@@ -1,0 +1,19 @@
+---
+import type { Localized } from '@/i18n/languages';
+import Eyebrow from './Eyebrow.astro';
+import styles from './SectionHeader.module.css';
+
+interface Props {
+  eyebrow: Localized;
+  heading: Localized;
+  /** Optional supporting line under the heading. */
+  sub?: Localized;
+  headingId: string;
+}
+
+const { eyebrow, heading, sub, headingId } = Astro.props;
+---
+
+<Eyebrow data-ka={eyebrow.ka}>{eyebrow.en}</Eyebrow>
+<h2 id={headingId} class={styles.heading} data-ka={heading.ka}>{heading.en}</h2>
+{sub && <p class={styles.sub} data-ka={sub.ka}>{sub.en}</p>}

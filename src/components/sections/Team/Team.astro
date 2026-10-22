@@ -1,0 +1,61 @@
+---
+import { Picture } from 'astro:assets';
+import Button from '@/components/ui/Button.astro';
+import Dialog from '@/components/ui/Dialog.astro';
+import Section from '@/components/ui/Section.astro';
+import SectionHeader from '@/components/ui/SectionHeader.astro';
+import { story } from '@/content/story';
+import { team } from '@/content/team';
+import { messages } from '@/i18n/messages';
+import styles from './Team.module.css';
+
+const { en, ka } = messages;
+---
+
+<Section id="team" labelledBy="team-heading">
+  <SectionHeader
+    eyebrow={{ en: en.team.eyebrow, ka: ka.team.eyebrow }}
+    heading={{ en: en.team.heading, ka: ka.team.heading }}
+    sub={{ en: en.team.sub, ka: ka.team.sub }}
+    headingId="team-heading"
+  />
+
+  <div class={styles.trackWrap}>
+    <div class={styles.track}>
+      {
+        team.map((member) => (
+          <div class={styles.card}>
+            <div class={styles.photo}>
+              <Picture
+                src={member.photo}
+                alt={member.name.en}
+                data-ka-alt={member.name.ka}
+                widths={[148, 296]}
+                sizes="140px"
+                formats={['avif']}
+                fallbackFormat="webp"
+                quality={75}
+              />
+            </div>
+            <h3 class={styles.name} data-ka={member.name.ka}>
+              {member.name.en}
+            </h3>
+            <p class={styles.role} data-ka={member.role.ka}>
+              {member.role.en}
+            </p>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+
+  <div class={styles.storyAction}>
+    <Button aria-haspopup="dialog" data-dialog-open="story" data-ka={ka.team.storyButton}>{en.team.storyButton}</Button>
+  </div>
+</Section>
+
+<Dialog id="story" title={{ en: en.team.storyHeading, ka: ka.team.storyHeading }}>
+  <div class={styles.storyText}>
+    {story.en.map((paragraph, index) => <p data-ka={story.ka[index]}>{paragraph}</p>)}
+  </div>
+</Dialog>

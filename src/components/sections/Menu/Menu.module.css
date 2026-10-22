@@ -1,0 +1,117 @@
+.menu {
+  background: rgba(20, 19, 17, 0.35);
+  -webkit-backdrop-filter: blur(24px) saturate(140%);
+  backdrop-filter: blur(24px) saturate(140%);
+  border-top: 1px solid var(--clr-border);
+  border-bottom: 1px solid var(--clr-border);
+}
+
+.categoryRow {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 16px;
+  margin-top: 36px;
+}
+
+.categoryButton {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: var(--clr-card-soft);
+  border: 1px solid var(--clr-border);
+  border-radius: var(--radius-card);
+  padding: 12px 12px 16px;
+  color: var(--clr-text);
+  text-align: center;
+  transition:
+    border-color 0.2s,
+    background 0.2s,
+    transform 0.2s;
+}
+
+.categoryButton:hover {
+  border-color: var(--clr-accent);
+  transform: translateY(-3px);
+}
+
+.categoryThumb {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: var(--radius-img);
+  overflow: hidden;
+  margin-bottom: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--clr-border);
+}
+
+.categoryThumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.categoryLabel {
+  font-family: var(--font-display);
+  font-size: 14px;
+  letter-spacing: 0.03em;
+}
+
+/* ---- items inside the dialog ---- */
+.itemGrid {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 18px;
+}
+
+.itemCard {
+  text-align: center;
+}
+
+.thumb {
+  aspect-ratio: 1 / 1;
+  border-radius: var(--radius-img);
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.05);
+  margin-bottom: 10px;
+  border: 1px solid var(--clr-border);
+}
+
+.thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.name {
+  font-size: 13px;
+  color: var(--clr-text);
+  letter-spacing: 0.02em;
+}
+
+.price {
+  font-size: 12px;
+  color: var(--clr-accent);
+  margin-top: 3px;
+  font-family: var(--font-display);
+}
+
+.groupDivider {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 6px 0 2px;
+  color: var(--clr-faint);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.groupDivider::before,
+.groupDivider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--clr-border);
+}

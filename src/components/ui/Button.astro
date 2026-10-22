@@ -1,0 +1,10 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import styles from './Button.module.css';
+
+type Props = HTMLAttributes<'button'>;
+
+const { class: className, type = 'button', ...rest } = Astro.props;
+---
+
+<button type={type} class:list={[styles.button, className]} {...rest}><slot /></button>

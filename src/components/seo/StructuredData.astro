@@ -1,0 +1,59 @@
+---
+import { menuCategories } from '@/content/menu';
+import { site, type Weekday } from '@/content/site';
+
+const schemaDay: Record<Weekday, string> = {
+  mon: 'Monday',
+  tue: 'Tuesday',
+  wed: 'Wednesday',
+  thu: 'Thursday',
+  fri: 'Friday',
+  sat: 'Saturday',
+  sun: 'Sunday',
+};
+
+/**
+ * schema.org CafeOrCoffeeShop JSON-LD, generated from the same content the page displays
+ * (address, phone, hours, social profiles, menu) — nothing here is written separately.
+ */
+const data = {
+  '@context': 'https://schema.org',
+  '@type': 'CafeOrCoffeeShop',
+  name: site.name,
+  url: Astro.site?.origin,
+  telephone: site.phone,
+  email: site.email,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: site.address.streetAddress,
+    addressLocality: site.address.locality,
+    addressCountry: site.address.country,
+  },
+  openingHoursSpecification: site.hours.map(({ day, opens, closes }) => ({
+    '@type': 'OpeningHoursSpecification',
+    dayOfWeek: schemaDay[day],
+    opens,
+    closes,
+  })),
+  sameAs: site.socials.map((social) => social.href),
+  hasMenu: {
+    '@type': 'Menu',
+    hasMenuSection: menuCategories.map((category) => ({
+      '@type': 'MenuSection',
+      name: category.title.en,
+      hasMenuItem: category.groups.flat().map((item) => ({
+        '@type': 'MenuItem',
+        name: item.name.en,
+        ...(item.price !== undefined && {
+          offers: { '@type': 'Offer', price: item.price, priceCurrency: 'GEL' },
+        }),
+      })),
+    })),
+  },
+};
+
+// `<` is escaped so no string in the data can ever close the script tag early.
+const json = JSON.stringify(data).replace(/</g, '\\u003c');
+---
+
+<script type="application/ld+json" set:html={json} is:inline></script>

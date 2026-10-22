@@ -1,0 +1,90 @@
+---
+import { Picture } from 'astro:assets';
+import banner1 from '@/assets/banner/banner-1.png';
+import banner2 from '@/assets/banner/banner-2.png';
+import banner3 from '@/assets/banner/banner-3.png';
+import Icon from '@/components/ui/Icon.astro';
+import { messages } from '@/i18n/messages';
+import styles from './Hero.module.css';
+
+const { en, ka } = messages;
+const slides = [banner1, banner2, banner3];
+---
+
+<section id="hero" class={styles.hero}>
+  <div class={styles.banner} data-carousel>
+    <!-- Focusable so keyboard users can scroll it with the arrow keys in every browser. -->
+    <div
+      class={styles.track}
+      data-carousel-track
+      role="group"
+      aria-label={en.a11y.photos}
+      data-ka-aria-label={ka.a11y.photos}
+      tabindex="0"
+    >
+      {
+        slides.map((slide, index) => (
+          <div class={styles.slide}>
+            {/*
+              The first slide is the largest contentful paint, so it gets top priority. The others sit off-screen
+              in a horizontal scroller, where native lazy loading would not trigger until a swipe (leaving an empty
+              slide), so carousel.ts promotes them to eager once the page has finished loading.
+            */}
+            <Picture
+              src={slide}
+              alt=""
+              widths={[640, 960, 1280, 1600, 1920]}
+              sizes="100vw"
+              formats={['avif']}
+              fallbackFormat="webp"
+              quality={70}
+              loading={index === 0 ? 'eager' : 'lazy'}
+              decoding="async"
+              fetchpriority={index === 0 ? 'high' : undefined}
+            />
+          </div>
+        ))
+      }
+    </div>
+
+    <div class={styles.intro}>
+      <div class={styles.glassCard}>
+        <h1 class={styles.slogan} data-ka={ka.hero.slogan}>{en.hero.slogan}</h1>
+      </div>
+    </div>
+
+    <button
+      type="button"
+      class={`${styles.arrow} ${styles.prev}`}
+      data-carousel-prev
+      aria-label={en.a11y.previousSlide}
+      data-ka-aria-label={ka.a11y.previousSlide}
+    >
+      <Icon name="chevronLeft" />
+    </button>
+    <button
+      type="button"
+      class={`${styles.arrow} ${styles.next}`}
+      data-carousel-next
+      aria-label={en.a11y.nextSlide}
+      data-ka-aria-label={ka.a11y.nextSlide}
+    >
+      <Icon name="chevronRight" />
+    </button>
+
+    <div class={styles.dots}>
+      {
+        slides.map((_, index) => (
+          <button
+            type="button"
+            class={styles.dot}
+            data-carousel-dot={index}
+            aria-label={`${en.a11y.goToSlide} ${index + 1}`}
+            data-ka-aria-label={`${ka.a11y.goToSlide} ${index + 1}`}
+            aria-current={index === 0 ? 'true' : 'false'}
+          />
+        ))
+      }
+    </div>
+  </div>
+</section>

@@ -1,0 +1,60 @@
+---
+import '@/styles/global.css';
+import ogImage from '@/assets/og/opengraph.jpg';
+import fontItalicUrl from '@/assets/fonts/new-hero-super-italic.woff2?url';
+import fontRegularUrl from '@/assets/fonts/new-hero-super.woff2?url';
+import BackgroundWall from '@/components/layout/BackgroundWall.astro';
+import Footer from '@/components/layout/Footer.astro';
+import Header from '@/components/layout/Header.astro';
+import StructuredData from '@/components/seo/StructuredData.astro';
+import { site } from '@/content/site';
+
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
+const ogImageUrl = new URL(ogImage.src, Astro.site);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>{site.title}</title>
+    <meta name="description" content={site.description} />
+    <link rel="canonical" href={canonicalUrl} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={site.title} />
+    <meta property="og:description" content={site.description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image:width" content={String(ogImage.width)} />
+    <meta property="og:image:height" content={String(ogImage.height)} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={site.title} />
+    <meta name="twitter:description" content={site.description} />
+    <meta name="twitter:image" content={ogImageUrl} />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <!-- Both faces appear above the fold (brand name and slogan are italic). -->
+    <link rel="preload" href={fontRegularUrl} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={fontItalicUrl} as="font" type="font/woff2" crossorigin />
+
+    <StructuredData />
+  </head>
+  <body>
+    <BackgroundWall />
+    <Header />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+
+    <script>
+      import '@/scripts/main';
+    </script>
+  </body>
+</html>

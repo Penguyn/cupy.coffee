@@ -1,0 +1,27 @@
+---
+import { icons, type IconName } from './icons';
+
+interface Props {
+  name: IconName;
+  class?: string;
+}
+
+const { name, class: className } = Astro.props;
+const icon = icons[name];
+---
+
+{
+  icon.mode === 'stroke' ? (
+    <svg
+      viewBox={icon.viewBox}
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      aria-hidden="true"
+      class={className}
+      set:html={icon.markup}
+    />
+  ) : (
+    <svg viewBox={icon.viewBox} fill="currentColor" aria-hidden="true" class={className} set:html={icon.markup} />
+  )
+}

@@ -1,0 +1,10 @@
+---
+import styles from './BackgroundWall.module.css';
+---
+
+<!--
+  Fixed full-viewport textured backdrop (cupywall.svg under a 50% dark veil).
+  It is a real element rather than a pseudo-element: a negative-z-index pseudo-element would paint behind
+  an opaque body background in most browsers and the texture would vanish.
+-->
+<div class={styles.wall} aria-hidden="true"></div>

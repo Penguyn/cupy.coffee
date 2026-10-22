@@ -1,0 +1,9 @@
+.section {
+  padding: clamp(64px, 10vw, 110px) clamp(20px, 6vw, 64px);
+  position: relative;
+}
+
+.wrap {
+  max-width: 1180px;
+  margin: 0 auto;
+}

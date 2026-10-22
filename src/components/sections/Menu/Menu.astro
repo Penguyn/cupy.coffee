@@ -1,0 +1,80 @@
+---
+import { Picture } from 'astro:assets';
+import Dialog from '@/components/ui/Dialog.astro';
+import Section from '@/components/ui/Section.astro';
+import SectionHeader from '@/components/ui/SectionHeader.astro';
+import { menuCategories } from '@/content/menu';
+import { messages } from '@/i18n/messages';
+import styles from './Menu.module.css';
+
+const { en, ka } = messages;
+
+// Source photos are at most 756px wide; these widths cover 1x–3x screens for both thumbnails and dialog items.
+const imageWidths = [200, 400, 756];
+---
+
+<Section id="menu" labelledBy="menu-heading" class={styles.menu}>
+  <SectionHeader
+    eyebrow={{ en: en.menu.eyebrow, ka: ka.menu.eyebrow }}
+    heading={{ en: en.menu.heading, ka: ka.menu.heading }}
+    sub={{ en: en.menu.sub, ka: ka.menu.sub }}
+    headingId="menu-heading"
+  />
+
+  <div class={styles.categoryRow}>
+    {
+      menuCategories.map((category) => (
+        <button type="button" class={styles.categoryButton} aria-haspopup="dialog" data-dialog-open={`menu-${category.id}`}>
+          <div class={styles.categoryThumb}>
+            <Picture
+              src={category.thumbnail}
+              alt=""
+              widths={imageWidths}
+              sizes="160px"
+              formats={['avif']}
+              fallbackFormat="webp"
+              quality={65}
+            />
+          </div>
+          <div class={styles.categoryLabel} data-ka={category.title.ka}>
+            {category.title.en}
+          </div>
+        </button>
+      ))
+    }
+  </div>
+</Section>
+
+{
+  /* Dialogs are siblings of the section: its backdrop-filter would otherwise trap their `position: fixed`. */
+  menuCategories.map((category) => (
+    <Dialog id={`menu-${category.id}`} title={category.title}>
+      <ul class={styles.itemGrid}>
+        {category.groups.map((group, groupIndex) => (
+          <>
+            {groupIndex > 0 && <li class={styles.groupDivider} aria-hidden="true" />}
+            {group.map((item) => (
+              <li class={styles.itemCard}>
+                <div class={styles.thumb}>
+                  <Picture
+                    src={item.image}
+                    alt=""
+                    widths={imageWidths}
+                    sizes="(max-width: 480px) 300px, 180px"
+                    formats={['avif']}
+                    fallbackFormat="webp"
+                    quality={70}
+                  />
+                </div>
+                <div class={styles.name} data-ka={item.name.ka}>
+                  {item.name.en}
+                </div>
+                {item.price !== undefined && <div class={styles.price}>{`${item.price}₾`}</div>}
+              </li>
+            ))}
+          </>
+        ))}
+      </ul>
+    </Dialog>
+  ))
+}

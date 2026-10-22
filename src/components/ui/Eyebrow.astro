@@ -1,0 +1,15 @@
+---
+import type { HTMLAttributes, HTMLTag } from 'astro/types';
+import styles from './SectionHeader.module.css';
+
+interface Props extends HTMLAttributes<'p'> {
+  as?: HTMLTag;
+  /** Georgian text, swapped in by the language toggle (see src/scripts/language.ts). */
+  'data-ka'?: string;
+}
+
+/** Small uppercase orange label that sits above headings. */
+const { as: Tag = 'p', class: className, ...rest } = Astro.props;
+---
+
+<Tag class:list={[styles.eyebrow, className]} {...rest}><slot /></Tag>

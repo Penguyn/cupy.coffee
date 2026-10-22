@@ -1,0 +1,48 @@
+---
+import { Picture } from 'astro:assets';
+import socialSpace from '@/assets/placeholders/social-space.jpg';
+import takeaway from '@/assets/space/takeaway.png';
+import workstation from '@/assets/space/workstation.png';
+import Section from '@/components/ui/Section.astro';
+import SectionHeader from '@/components/ui/SectionHeader.astro';
+import { messages } from '@/i18n/messages';
+import styles from './OneSpace.module.css';
+
+const { en, ka } = messages;
+
+/** One image per face, in the same order as `messages.space.faces`. The third is still a stock placeholder. */
+const faceImages = [takeaway, workstation, socialSpace];
+---
+
+<Section id="onespace" labelledBy="onespace-heading">
+  <SectionHeader
+    eyebrow={{ en: en.space.eyebrow, ka: ka.space.eyebrow }}
+    heading={{ en: en.space.heading, ka: ka.space.heading }}
+    headingId="onespace-heading"
+  />
+
+  <div class={styles.list}>
+    {
+      en.space.faces.map((face, index) => (
+        <div class={styles.card}>
+          <div class={styles.image}>
+            <Picture
+              src={faceImages[index]}
+              alt=""
+              widths={[480, 720, 960, 1200]}
+              sizes="(max-width: 720px) 100vw, 472px"
+              formats={['avif']}
+              fallbackFormat="webp"
+              quality={70}
+            />
+          </div>
+          <div class={styles.text}>
+            <div class={styles.number}>{String(index + 1).padStart(2, '0')}</div>
+            <h3 class={styles.title} data-ka={ka.space.faces[index].title}>{face.title}</h3>
+            <p class={styles.body} data-ka={ka.space.faces[index].body}>{face.body}</p>
+          </div>
+        </div>
+      ))
+    }
+  </div>
+</Section>

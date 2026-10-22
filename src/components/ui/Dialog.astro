@@ -1,0 +1,30 @@
+---
+import type { Localized } from '@/i18n/languages';
+import { messages } from '@/i18n/messages';
+import styles from './Dialog.module.css';
+
+interface Props {
+  id: string;
+  title: Localized;
+}
+
+const { id, title } = Astro.props;
+const { en, ka } = messages;
+---
+
+<!--
+  Native modal dialog, driven by src/scripts/dialogs.ts. The browser provides the focus trap, Escape to close,
+  the inert page behind it and focus return to the opener; the script adds backdrop-click and keeps the page behind from scrolling.
+  Keep dialogs outside elements that use `backdrop-filter` (sections): those would become the containing block.
+-->
+<dialog id={id} class={styles.overlay} aria-labelledby={`${id}-title`} data-dialog>
+  <div class={styles.panel} data-dialog-panel>
+    <div class={styles.head}>
+      <h3 id={`${id}-title`} class={styles.title} data-ka={title.ka}>{title.en}</h3>
+      <button type="button" class={styles.close} data-dialog-close autofocus>
+        <span aria-hidden="true">✕</span> <span data-ka={ka.close}>{en.close}</span>
+      </button>
+    </div>
+    <slot />
+  </div>
+</dialog>

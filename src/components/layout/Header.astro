@@ -1,0 +1,45 @@
+---
+import Icon from '@/components/ui/Icon.astro';
+import { LANGUAGES } from '@/i18n/languages';
+import { messages } from '@/i18n/messages';
+import styles from './Header.module.css';
+
+const { en, ka } = messages;
+
+const navLinks = [
+  { href: '#menu', label: { en: en.nav.menu, ka: ka.nav.menu } },
+  { href: '#team', label: { en: en.nav.team, ka: ka.nav.team } },
+  { href: '#contact', label: { en: en.nav.contact, ka: ka.nav.contact } },
+];
+---
+
+<header class={styles.header}>
+  <a class={styles.skipLink} href="#main" data-ka={ka.a11y.skipToContent}>{en.a11y.skipToContent}</a>
+
+  <div class={styles.brand}>
+    <Icon name="logo" class={styles.logo} />
+    <span class={styles.brandName} data-ka={ka.brandName}>{en.brandName}</span>
+  </div>
+
+  <nav class={styles.nav} aria-label={en.a11y.mainNavigation} data-ka-aria-label={ka.a11y.mainNavigation}>
+    {navLinks.map(({ href, label }) => <a href={href} data-ka={label.ka}>{label.en}</a>)}
+  </nav>
+
+  {/* The wrapper matters: as a flex item it keeps the toggle from shrinking (and clipping) on very narrow screens. */}
+  <div class={styles.headerRight}>
+    <div
+      class={styles.langToggle}
+      role="group"
+      aria-label={en.a11y.language}
+      data-ka-aria-label={ka.a11y.language}
+    >
+      {
+        LANGUAGES.map(({ code, label }) => (
+          <button type="button" data-lang-button={code} aria-pressed={code === 'en' ? 'true' : 'false'}>
+            {label}
+          </button>
+        ))
+      }
+    </div>
+  </div>
+</header>

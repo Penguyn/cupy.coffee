@@ -1,0 +1,19 @@
+---
+import styles from './Section.module.css';
+
+interface Props {
+  id: string;
+  /** id of the heading that names this section (exposes it as a labelled landmark). */
+  labelledBy?: string;
+  /** Extra class for per-section backgrounds (glass panels etc.). */
+  class?: string;
+}
+
+const { id, labelledBy, class: className } = Astro.props;
+---
+
+<section id={id} aria-labelledby={labelledBy} class:list={[styles.section, className]}>
+  <div class={styles.wrap}>
+    <slot />
+  </div>
+</section>
